@@ -270,7 +270,7 @@ export function Hero() {
         {/* the name lives in the room — between the wall and the man */}
         <div className="hero-name-wrap absolute inset-0 z-30 md:z-10">
           <div className="hero-name-inner absolute bottom-[23svh] left-5 md:top-[24svh] md:bottom-auto md:left-[5vw]">
-            <h1 className="hero-name display text-[clamp(60px,20vw,118px)] text-bone md:text-[min(9.8vw,16svh)]">
+            <h1 className="hero-name display text-[clamp(54px,16vw,96px)] text-bone md:text-[min(7.2vw,12svh)]">
               <span className="block">{person.first}</span>
               <span className="block pl-[0.5em] md:pl-[0.74em]">{person.last}</span>
             </h1>
@@ -301,7 +301,7 @@ export function Hero() {
           Building technology ecosystems that help businesses scale with confidence.
         </p>
         <div className="hero-cap absolute inset-x-5 bottom-6 flex items-end justify-between text-[12px] text-smoke md:inset-x-[5vw] md:bottom-8">
-          <span>A portfolio in seven chapters</span>
+          <span>A portfolio in chapters</span>
           <span className="flex items-center gap-3">
             Scroll
             <span className="relative block h-10 w-px overflow-hidden bg-bone/15">

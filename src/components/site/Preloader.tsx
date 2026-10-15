@@ -86,7 +86,7 @@ export function Preloader() {
             </span>
           ))}
         </p>
-        <p className="pl-name display text-[clamp(52px,9vw,150px)]">
+        <p className="pl-name display text-[clamp(44px,7vw,112px)]">
           {person.name.split("").map((c, i) => (
             <span key={i} className="inline-block opacity-0">
               {c === " " ? " " : c}
@@ -99,7 +99,7 @@ export function Preloader() {
       </div>
 
       <div className="pl-fade absolute inset-x-0 bottom-0 flex items-end justify-between px-5 pb-6 text-[12px] text-smoke tabular-nums md:px-10 md:pb-8">
-        <span>A portfolio in seven chapters</span>
+        <span>A portfolio in chapters</span>
         <span ref={count}>000</span>
       </div>
     </div>

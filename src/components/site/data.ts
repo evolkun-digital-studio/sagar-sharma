@@ -11,13 +11,13 @@ export const person = {
 };
 
 export const chapters = [
-  { href: "#purpose", n: "I", label: "Purpose" },
-  { href: "#group", n: "II", label: "The Group" },
-  { href: "#journey", n: "III", label: "Journey" },
-  { href: "#principles", n: "IV", label: "Principles" },
-  { href: "#practice", n: "V", label: "Practice" },
-  { href: "#writing", n: "VI", label: "Writing" },
-  { href: "#contact", n: "VII", label: "Contact" },
+  { href: "#purpose", label: "Purpose" },
+  { href: "#group", label: "The Group" },
+  { href: "#journey", label: "Journey" },
+  { href: "#principles", label: "Principles" },
+  { href: "#practice", label: "Practice" },
+  { href: "#writing", label: "Writing" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export const focusAreas = [

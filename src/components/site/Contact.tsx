@@ -19,7 +19,7 @@ export function Contact() {
       const g = giant.current;
       if (!g) return;
       g.style.fontSize = "100px";
-      g.style.fontSize = `${(100 * window.innerWidth * 0.96) / g.scrollWidth}px`;
+      g.style.fontSize = `${(100 * window.innerWidth * 0.78) / g.scrollWidth}px`;
     };
     fit();
     document.fonts?.ready.then(fit);
@@ -59,24 +59,24 @@ export function Contact() {
   };
 
   return (
-    <section ref={root} id="contact" className="relative overflow-hidden bg-film text-bone">
+    <section ref={root} id="contact" className="relative overflow-hidden bg-bone text-film">
       <div className="px-5 pt-24 md:px-[5vw] md:pt-32">
-        <ChapterMark n="VII" label="Contact" dark />
-        <RevealLines as="h3" className="display mt-16 max-w-[11ch] text-[clamp(48px,7.4vw,126px)] md:mt-24">
+        <ChapterMark label="Contact" />
+        <RevealLines as="h3" className="display mt-14 max-w-[11ch] text-[clamp(40px,6vw,96px)] md:mt-20">
           Let's build technology that lasts.
         </RevealLines>
 
         <div className="ct-rows mt-20 grid grid-cols-1 gap-12 md:mt-32 md:grid-cols-12 md:gap-8">
           <div className="ct-row md:col-span-6">
-            <p className="text-[13px] text-smoke">Email</p>
+            <p className="text-[12px] text-signal">Email</p>
             <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-3">
-              <a href={`mailto:${person.email}`} data-cursor="Write" className="draw-line serif pb-1 text-[clamp(28px,3.4vw,56px)] leading-none">
+              <a href={`mailto:${person.email}`} className="draw-line serif pb-1 text-[clamp(24px,2.6vw,42px)] leading-none">
                 {person.email}
               </a>
               <button
                 type="button"
                 onClick={copy}
-                className="relative h-8 w-[84px] cursor-pointer overflow-hidden rounded-full border border-rule-dark text-[13px] text-smoke transition-colors hover:border-signal hover:text-signal"
+                className="relative h-8 w-[84px] cursor-pointer overflow-hidden rounded-full border border-rule text-[12px] text-ash transition-colors hover:border-signal hover:text-signal"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span
@@ -94,16 +94,16 @@ export function Contact() {
             </div>
           </div>
           <div className="ct-row md:col-span-3">
-            <p className="text-[13px] text-smoke">LinkedIn</p>
-            <a href={person.linkedin} target="_blank" rel="noreferrer" className="draw-line serif mt-3 inline-block pb-1 text-[clamp(22px,2vw,32px)] leading-none">
+            <p className="text-[12px] text-signal">LinkedIn</p>
+            <a href={person.linkedin} target="_blank" rel="noreferrer" className="draw-line serif mt-3 inline-block pb-1 text-[clamp(20px,1.6vw,28px)] leading-none">
               {person.linkedinLabel}
             </a>
           </div>
           <div className="ct-row md:col-span-3">
-            <p className="text-[13px] text-smoke">Meetings</p>
+            <p className="text-[12px] text-signal">Meetings</p>
             <a
               href={`mailto:${person.email}?subject=Conversation%20request`}
-              className="draw-line serif mt-3 inline-block pb-1 text-[clamp(22px,2vw,32px)] leading-none"
+              className="draw-line serif mt-3 inline-block pb-1 text-[clamp(20px,1.6vw,28px)] leading-none"
             >
               Schedule a conversation
             </a>
@@ -112,12 +112,12 @@ export function Contact() {
       </div>
 
       <footer className="ct-foot mt-32 md:mt-48">
-        <div className="mx-5 flex flex-col gap-3 border-t border-rule-dark pt-6 text-[13px] text-smoke md:mx-[5vw] md:flex-row md:items-center md:justify-between">
+        <div className="mx-5 flex flex-col gap-3 border-t border-rule pt-6 text-[12px] text-ash md:mx-[5vw] md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} {person.name}</p>
           <p>
             {person.role}, {person.org}
           </p>
-          <button type="button" onClick={() => scrollToTarget(0)} className="roll-host self-start text-bone md:self-auto">
+          <button type="button" onClick={() => scrollToTarget(0)} className="roll-host self-start text-film md:self-auto">
             <Roll>Back to top</Roll>
           </button>
         </div>
@@ -125,7 +125,7 @@ export function Contact() {
           <p
             ref={giant}
             aria-hidden
-            className="ct-giant display mx-auto w-max text-[18vw] whitespace-nowrap text-bone"
+            className="ct-giant display mx-auto w-max text-[12vw] whitespace-nowrap text-film"
             style={{ lineHeight: 0.8, marginBottom: "-0.04em" }}
           >
             {person.name}

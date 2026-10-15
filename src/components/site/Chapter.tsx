@@ -4,8 +4,8 @@ import { gsap, SplitText, registerGsap, prefersReducedMotion } from "./core";
 
 registerGsap();
 
-/** Chapter heading: roman numeral, title, and a hairline that draws across. */
-export function ChapterMark({ n, label, dark = false }: { n: string; label: string; dark?: boolean }) {
+/** Chapter heading and a hairline that draws across. */
+export function ChapterMark({ label }: { label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useGSAP(
     () => {
@@ -21,14 +21,11 @@ export function ChapterMark({ n, label, dark = false }: { n: string; label: stri
     { scope: ref },
   );
   return (
-    <div ref={ref} className={`flex items-baseline gap-5 text-[13px] ${dark ? "text-smoke" : "text-ash"}`}>
-      <span className="overflow-hidden">
-        <span className="cm-t serif inline-block min-w-[2.2em] text-[14px] tracking-[0.04em] text-signal">{n}</span>
-      </span>
+    <div ref={ref} className="flex items-baseline gap-4 text-[12px] text-signal">
       <h2 className="overflow-hidden">
-        <span className={`cm-t inline-block ${dark ? "text-bone" : "text-film"}`}>{label}</span>
+        <span className="cm-t inline-block">{label}</span>
       </h2>
-      <span className={`cm-rule h-px flex-1 origin-left self-center ${dark ? "bg-rule-dark" : "bg-rule"}`} />
+      <span className="cm-rule h-px flex-1 origin-left self-center bg-rule" />
     </div>
   );
 }

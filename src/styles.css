@@ -60,12 +60,12 @@
 }
 
 :root {
-  --charcoal: #171a1d;
+  --charcoal: #24292e;
   --charcoal-deep: #101214;
-  --charcoal-muted: #586168;
-  --moonlit: #d5d9de;
-  --moonlit-muted: #aab2ba;
-  --signal-red: #e6534f;
+  --charcoal-muted: #59636c;
+  --moonlit: #cdd2d8;
+  --moonlit-muted: #9ca6af;
+  --signal-red: #d74642;
   --bone: var(--moonlit);
   --film: var(--charcoal);
   --ash: var(--charcoal-muted);
@@ -214,10 +214,6 @@ html.lenis body {
 }
 @keyframes preloader-failsafe {
   to { visibility: hidden; opacity: 0; pointer-events: none; }
-}
-
-@media (pointer: coarse) {
-  .cursor-dot { display: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

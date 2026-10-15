@@ -1,6 +1,5 @@
 import { SmoothScroll } from "./SmoothScroll";
 import { Preloader } from "./Preloader";
-import { Cursor } from "./Cursor";
 import { Nav } from "./Nav";
 import { Hero } from "./Hero";
 import { Purpose } from "./Purpose";
@@ -15,7 +14,6 @@ export function Home() {
     <>
       <SmoothScroll />
       <Preloader />
-      <Cursor />
       <div className="grain" aria-hidden />
       <Nav />
       <main>

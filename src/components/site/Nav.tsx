@@ -66,7 +66,7 @@ export function Nav() {
             animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
             exit={{ clipPath: "inset(0% 0% 100% 0%)" }}
             transition={{ duration: reduce ? 0 : 1, ease }}
-            className="fixed inset-0 z-[55] flex flex-col bg-film px-5 pt-24 pb-8 text-bone md:px-[5vw] md:pt-32 md:pb-10"
+            className="fixed inset-0 z-[55] flex flex-col bg-bone px-5 pt-24 pb-8 text-film md:px-[5vw] md:pt-32 md:pb-10"
           >
             <div className="grid flex-1 grid-cols-1 gap-12 md:grid-cols-12">
               <ul className="group/menu md:col-span-8">
@@ -81,8 +81,7 @@ export function Nav() {
                       transition={{ duration: 0.9, delay: 0.25 + i * 0.05, ease: [0.16, 1, 0.3, 1] }}
                       className="flex items-baseline gap-5 py-1 transition-opacity duration-500 group-hover/menu:opacity-30 hover:!opacity-100"
                     >
-                      <span className="serif w-12 text-[15px] tracking-[0.04em] text-smoke">{c.n}</span>
-                      <span className="display text-[clamp(36px,5.2vw,78px)]">{c.label}</span>
+                      <span className="display text-[clamp(32px,4.4vw,64px)]">{c.label}</span>
                     </motion.a>
                   </li>
                 ))}
@@ -95,7 +94,7 @@ export function Nav() {
                 className="flex flex-col justify-end gap-8 text-[14px] md:col-span-3 md:col-start-10"
               >
                 <div>
-                  <p className="text-smoke">Find me</p>
+                  <p className="text-signal">Find me</p>
                   <ul className="mt-3 space-y-1">
                     <li>
                       <a className="draw-line" href={person.linkedin} target="_blank" rel="noreferrer">
@@ -109,7 +108,7 @@ export function Nav() {
                     </li>
                   </ul>
                 </div>
-                <p className="text-smoke">
+                <p className="text-ash">
                   {person.role}
                   <br />
                   {person.org}

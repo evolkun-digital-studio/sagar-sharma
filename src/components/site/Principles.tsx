@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap } from "./core";
 import { ChapterMark } from "./Chapter";
@@ -9,8 +9,6 @@ registerGsap();
 /** Six principles, shown one at a time like intertitles in a silent film. */
 export function Principles() {
   const root = useRef<HTMLElement>(null);
-  const [idx, setIdx] = useState(0);
-
   useGSAP(
     () => {
       const sec = root.current!;
@@ -32,7 +30,6 @@ export function Principles() {
             end: () => `+=${window.innerHeight * n * 0.85}`,
             pin: true,
             scrub: 1,
-            onUpdate: (self) => setIdx(Math.min(n - 1, Math.floor(self.progress * n * 0.999))),
           },
         });
         // the first card resolves out of a blur as the section arrives
@@ -63,7 +60,7 @@ export function Principles() {
   );
 
   return (
-    <section ref={root} id="principles" className="relative overflow-hidden bg-film text-bone">
+    <section ref={root} id="principles" className="relative overflow-hidden bg-bone text-film">
       <style>{`
         #principles.is-pinned { height: 100svh; }
         #principles.is-pinned .pr-stack { position: relative; flex: 1; }
@@ -74,31 +71,20 @@ export function Principles() {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
-        style={{ background: "radial-gradient(ellipse at center, rgba(236,234,229,.06) 0%, transparent 60%)" }}
+        style={{ background: "radial-gradient(ellipse at center, rgba(36,41,46,.06) 0%, transparent 60%)" }}
       />
 
       <div className="relative flex h-full flex-col px-5 pt-24 pb-8 md:px-[5vw] md:pt-28 md:pb-10">
-        <ChapterMark n="IV" label="Principles" dark />
+        <ChapterMark label="Principles" />
 
         <ol className="pr-stack mt-12 space-y-12">
           {principles.map((p) => (
             <li key={p} className="pr-item text-center">
-              <p className="serif max-w-[16ch] text-[clamp(34px,5.2vw,82px)] leading-[1.04] italic">{p}</p>
+              <p className="serif max-w-[16ch] text-[clamp(30px,4.4vw,68px)] leading-[1.06] italic">{p}</p>
             </li>
           ))}
         </ol>
 
-        <div className="pr-meta hidden items-center justify-between text-[12px] text-smoke tabular-nums">
-          <span>Leadership philosophy</span>
-          <span className="flex items-center gap-2 whitespace-nowrap md:gap-3" aria-live="polite">
-            {principles.map((p, i) => (
-              <span key={p} className={`h-px w-4 transition-colors md:w-6 duration-500 ${i <= idx ? "bg-bone" : "bg-bone/20"}`} />
-            ))}
-            <span className="ml-2">
-              {idx + 1} / {principles.length}
-            </span>
-          </span>
-        </div>
       </div>
     </section>
   );

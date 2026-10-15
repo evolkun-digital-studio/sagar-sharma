@@ -12,7 +12,7 @@ const YEARS = [2012, 2016, 2019, 2023, new Date().getFullYear()];
 function Odometer({ value }: { value: number }) {
   const digits = String(value).split("").map(Number);
   return (
-    <div className="odo display flex text-[clamp(96px,17vw,280px)] leading-none tabular-nums" aria-label={String(value)} role="img">
+    <div className="odo display flex text-[clamp(72px,12vw,190px)] leading-none tabular-nums" aria-label={String(value)} role="img">
       {digits.map((d, i) => (
         <span key={i} className="relative inline-block h-[1em] overflow-hidden" aria-hidden>
           <span className="odo-strip flex flex-col" data-digit={d} style={{ transform: `translateY(${-d * 10}%)` }}>
@@ -90,17 +90,13 @@ export function Journey() {
 
   return (
     <section ref={root} id="journey" className="relative bg-bone px-5 pt-24 pb-20 text-film md:px-[5vw] md:pt-32 md:pb-32">
-      <ChapterMark n="III" label="Journey" />
+      <ChapterMark label="Journey" />
 
       <div className="mt-14 grid grid-cols-1 md:mt-24 md:grid-cols-12 md:gap-8">
         <div className="sticky top-0 z-10 -mx-5 bg-bone px-5 pt-16 pb-5 md:static md:col-span-6 md:mx-0 md:bg-transparent md:p-0">
           <div className="md:sticky md:top-[16svh]">
             <Odometer value={YEARS[0]} />
-            <div className="mt-4 flex items-center gap-4 text-[13px] text-ash md:mt-8">
-              <span className="tabular-nums text-film">
-                {String(active + 1).padStart(2, "0")} / {String(journey.length).padStart(2, "0")}
-              </span>
-              <span className="h-px w-10 bg-rule" />
+            <div className="mt-4 flex items-center text-[12px] text-ash md:mt-6">
               <span>{journey[active].yearsLong}</span>
             </div>
           </div>
@@ -118,7 +114,7 @@ export function Journey() {
               }`}
             >
               <p className="jr-in text-[13px] text-ash">{j.yearsLong}</p>
-            <h3 className="jr-in serif mt-4 text-[clamp(32px,3vw,48px)] leading-[1.04]">{j.kicker}</h3>
+              <h3 className="jr-in serif mt-4 text-[clamp(28px,2.6vw,42px)] leading-[1.04]">{j.kicker}</h3>
               <p className="jr-in mt-5 text-[15px] text-film">
                 {j.role}
                 {j.org && <span className="text-ash">, {j.org}</span>}

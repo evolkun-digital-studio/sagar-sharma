@@ -26,8 +26,8 @@ export function Practice() {
 
   return (
     <section ref={root} id="practice" className="relative bg-bone px-5 pt-24 pb-20 text-film md:px-[5vw] md:pt-32 md:pb-28">
-      <ChapterMark n="V" label="Practice" />
-      <RevealLines as="h3" className="display mt-16 max-w-[14ch] text-[clamp(40px,5.2vw,88px)] md:mt-24">
+      <ChapterMark label="Practice" />
+      <RevealLines as="h3" className="display mt-14 max-w-[14ch] text-[clamp(36px,4.6vw,76px)] md:mt-20">
         Eight disciplines that compound.
       </RevealLines>
 
@@ -63,15 +63,14 @@ export function Writing() {
 
   return (
     <section ref={root} id="writing" className="relative bg-bone px-5 pt-20 pb-32 text-film md:px-[5vw] md:pt-28 md:pb-44">
-      <ChapterMark n="VI" label="Writing" />
+      <ChapterMark label="Writing" />
       <ul className="group/wr mt-16 md:mt-24">
         {writing.map((w, i) => (
           <li key={w.title} className="wr-row relative transition-opacity duration-700 group-hover/wr:opacity-30 hover:!opacity-100">
             <span className="wr-rule absolute inset-x-0 top-0 h-px origin-left bg-rule" />
-            <a href="#" data-cursor="Read" className="group grid grid-cols-1 items-baseline gap-2 py-8 md:grid-cols-12 md:gap-8 md:py-10">
-              <span className="text-[13px] text-ash tabular-nums md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
-              <span className="overflow-hidden md:col-span-8">
-                <span className="wr-title serif block text-[clamp(26px,2.8vw,44px)] leading-[1.1]">
+            <a href="#" className="group grid grid-cols-1 items-baseline gap-2 py-8 md:grid-cols-12 md:gap-8 md:py-10">
+              <span className="overflow-hidden md:col-span-9">
+                <span className="wr-title serif block text-[clamp(24px,2.2vw,36px)] leading-[1.1]">
                   <span className="inline-block transition-transform duration-[900ms] ease-[cubic-bezier(.16,1,.3,1)] md:group-hover:translate-x-4">
                     {w.title}
                   </span>
