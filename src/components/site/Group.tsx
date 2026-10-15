@@ -122,14 +122,14 @@ export function Group() {
   );
 
   return (
-    <section ref={root} id="group" className="surface-ink section-pad relative">
+    <section ref={root} id="group" className="surface-white section-pad relative">
       <div className="wrap"> 
 
         <div className="grid-12 mt-14 gap-y-10 md:mt-20">
           <RevealLines as="h3" className="t-h1 col-span-12 max-w-[22ch] md:col-span-8">
             One architecture across five industries.
           </RevealLines>
-          <p className="col-span-12 max-w-[38ch] self-end text-[15px] leading-[1.7] text-mist-mute md:col-span-3 md:col-start-10">
+          <p className="col-span-12 max-w-[38ch] self-end text-[15px] leading-[1.7] text-graphite md:col-span-3 md:col-start-10">
             As Chief Technology Officer of SR18 Group, I lead technology strategy for every business
             in the group: enterprise architecture, cybersecurity, AI and digital transformation,
             held to one standard.
@@ -190,7 +190,7 @@ export function Group() {
                     {/* collapsed: vertical name */}
                     <span
                       aria-hidden={on}
-                      className={`absolute bottom-7 left-6 text-[clamp(18px,1.5vw,24px)] font-medium tracking-[-0.01em] whitespace-nowrap text-mist [writing-mode:vertical-rl] rotate-180 transition-opacity duration-500 ${
+                      className={`absolute bottom-7 left-6 text-[clamp(16px,1.2vw,20px)] font-semibold tracking-[0] whitespace-nowrap text-mist [writing-mode:vertical-rl] rotate-180 transition-opacity duration-500 ${
                         on ? "opacity-0" : "opacity-100 delay-300"
                       }`}
                     >
@@ -269,18 +269,18 @@ export function Group() {
               );
             })}
           </ul>
-          <p className="mt-4 text-[13px] text-mist-mute" aria-hidden>
+          <p className="mt-4 text-[13px] text-mute" aria-hidden>
             Swipe to see all five
           </p>
 
-          <div className="mt-12 border-y border-hair-dark py-8">
-            <p className="text-[14px] text-mist-mute">Shared foundation</p>
+          <div className="mt-12 border-y border-hair py-8">
+            <p className="text-[14px] text-mute">Shared foundation</p>
             <ul
               className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2"
               aria-label="Focus areas"
             >
               {focusAreas.map((f) => (
-                <li key={f} className="text-[16px] leading-[1.4] text-mist">
+                <li key={f} className="text-[16px] leading-[1.4] text-ink">
                   {f}
                 </li>
               ))}

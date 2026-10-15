@@ -4,23 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* self-hosted variable fonts (latin subset): one family, two cuts */
-@font-face {
-  font-family: "Geist";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("./assets/fonts/geist-latin-wght-normal.woff2") format("woff2-variations");
-}
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("./assets/fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
-}
-
-/* Open Sans: used by the Purpose section */
+/* self-hosted variable font (latin subset): Open Sans, one soft family for everything */
 @font-face {
   font-family: "Open Sans";
   font-style: normal;
@@ -33,10 +17,11 @@
    Two surfaces (paper / ink), one accent (signal), one typeface.
 ------------------------------------------------------------------- */
 @theme inline {
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Open Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --font-open: "Open Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-mono: "Open Sans", ui-sans-serif, system-ui, sans-serif;
 
   --color-paper: var(--paper);
   --color-ink: var(--ink);
@@ -80,14 +65,16 @@
   --hair-dark: rgba(237, 237, 234, 0.12);
   --signal: #c23b33;
   --signal-on-ink: #e5534b;
+  --white: #ffffff;
+  --silver: #e7e9ec;
   --radius: 0px;
 
   /* type scale */
-  --t-display: clamp(56px, 9vw, 168px);
-  --t-h1: clamp(40px, 3vw, 64px);
-  --t-h2: clamp(28px, 3vw, 52px);
-  --t-h3: clamp(20px, 1.6vw, 26px);
-  --t-body: 17px;
+  --t-display: clamp(40px, 6vw, 96px);
+  --t-h1: clamp(26px, 2.4vw, 40px);
+  --t-h2: clamp(22px, 2vw, 32px);
+  --t-h3: clamp(17px, 1.3vw, 20px);
+  --t-body: 16px;
   --t-small: 14px;
   --t-mono: 13px;
 
@@ -99,12 +86,21 @@
 }
 
 /* surfaces: each section picks one, text tokens follow */
-.surface-paper {
+.surface-paper,
+.surface-white {
   --fg: var(--ink);
   --fg-2: var(--graphite);
   --fg-3: var(--mute);
   --line: var(--hair);
-  background-color: var(--paper);
+  background-color: var(--white);
+  color: var(--ink);
+}
+.surface-silver {
+  --fg: var(--ink);
+  --fg-2: var(--graphite);
+  --fg-3: var(--mute);
+  --line: rgba(14, 15, 17, 0.12);
+  background-color: var(--silver);
   color: var(--ink);
 }
 .surface-ink {
@@ -134,7 +130,7 @@
     font-size: var(--t-body);
     font-weight: 400;
     line-height: 1.65;
-    letter-spacing: -0.005em;
+    letter-spacing: 0;
     overflow-x: clip;
   }
   ::selection {
@@ -166,19 +162,19 @@ html.lenis body {
 /* ---------- type scale ---------- */
 .t-display {
   font-size: var(--t-display);
-  font-weight: 500;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
 .t-h1 {
   font-size: var(--t-h1);
-  font-weight: 500;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 /* statement that sits on one line from tablet up, centred */
 .t-h1-oneline {
-  font-size: clamp(1.6rem, 3vw, 4rem);
+  font-size: clamp(1.4rem, 2.4vw, 2.5rem);
 }
 @media (min-width: 768px) {
   .t-h1-oneline {
@@ -188,21 +184,21 @@ html.lenis body {
 }
 .t-h2 {
   font-size: var(--t-h2);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
 }
 .t-h3 {
   font-size: var(--t-h3);
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 .t-body {
   font-size: var(--t-body);
   font-weight: 400;
-  line-height: 1.65;
-  letter-spacing: -0.005em;
+  line-height: 1.7;
+  letter-spacing: 0;
   max-width: 62ch;
 }
 .t-small {
@@ -216,6 +212,9 @@ html.lenis body {
   font-weight: 400;
   letter-spacing: 0;
   font-variant-numeric: tabular-nums;
+}
+.serif {
+  font-family: var(--font-sans);
 }
 
 /* ---------- layout ---------- */
@@ -237,9 +236,9 @@ html.lenis body {
 /* hero (restored original code) still uses these */
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
-  line-height: 0.96;
-  letter-spacing: -0.055em;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 .line-mask {
   overflow: clip;
@@ -343,11 +342,11 @@ html.lenis body {
   --jr-muted: #6b777e;
   --jr-rule: #c5cdd1;
   --jr-active: #1b3444;
-  --jr-accent: #edf1f2;
+  --jr-accent: #d6dade;
   position: relative;
   min-height: clamp(46rem, 100dvh, 62rem);
   overflow: hidden;
-  background: #f8f8f6;
+  background: var(--silver);
   color: var(--jr-ink);
   padding: clamp(5.5rem, 9vw, 8rem) max(1.25rem, 5vw) clamp(2rem, 4vw, 3.5rem);
 }
@@ -375,10 +374,10 @@ html.lenis body {
   overflow: hidden;
   color: var(--jr-active);
   font-family: var(--font-display);
-  font-size: clamp(5.5rem, 10.7vw, 11.5rem);
+  font-size: clamp(3.5rem, 6.5vw, 7rem);
   font-variant-numeric: tabular-nums;
-  font-weight: 500;
-  letter-spacing: -0.075em;
+  font-weight: 600;
+  letter-spacing: -0.04em;
   line-height: 0.84;
 }
 .jr-year-reel { will-change: transform; }
@@ -391,11 +390,10 @@ html.lenis body {
   max-width: 15ch;
   color: var(--jr-ink);
   font-family: var(--font-serif);
-  font-size: clamp(2.7rem, 4.4vw, 5rem);
-  font-optical-sizing: auto;
-  font-weight: 350;
-  letter-spacing: -0.045em;
-  line-height: 0.94;
+  font-size: clamp(1.75rem, 2.8vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
   text-wrap: balance;
 }
 .jr-heading-word { display: inline-block; overflow: hidden; margin-bottom: -0.16em; padding-bottom: 0.16em; vertical-align: top; }
@@ -445,7 +443,7 @@ html.lenis body {
   height: 0.58rem;
   border: 1px solid var(--jr-muted);
   border-radius: 50%;
-  background: #f8f8f6;
+  background: var(--silver);
   transform: translate(-50%, -50%);
   transition: width 350ms var(--ease-expo), height 350ms var(--ease-expo), background-color 350ms ease, border-color 350ms ease;
 }
@@ -480,17 +478,17 @@ html.lenis body {
   color: var(--jr-active);
   transition: color 250ms ease, background-color 250ms ease, opacity 250ms ease;
 }
-.jr-controls button:not(:disabled):hover { background: var(--jr-active); color: #f8f8f6; }
+.jr-controls button:not(:disabled):hover { background: var(--jr-active); color: var(--silver); }
 .jr-controls button:active:not(:disabled) { transform: translateY(1px); }
 .jr-controls button:disabled { border-color: var(--jr-rule); color: var(--jr-rule); cursor: not-allowed; opacity: 0.7; }
 .jr-controls svg { width: 1.05rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.35; }
 @media (max-width: 767px) {
   .journey-explorer { min-height: 55rem; padding-top: 5.5rem; padding-bottom: 2.25rem; }
   .jr-stage { display: block; min-height: 37rem; padding: 4.75rem 0 2.75rem; }
-  .jr-year { font-size: clamp(5rem, 25vw, 7.25rem); }
+  .jr-year { font-size: clamp(3.5rem, 18vw, 5rem); }
   .jr-content { min-height: 23.5rem; margin-top: 3.75rem; }
   .jr-panel { inset: 0 0 auto; }
-  .jr-kicker { max-width: 12ch; font-size: clamp(2.55rem, 11.5vw, 3.7rem); }
+  .jr-kicker { max-width: 12ch; font-size: clamp(1.75rem, 8vw, 2.4rem); }
   .jr-position { grid-template-columns: 1fr; gap: 0.2rem; }
   .jr-timeline-shell { padding-right: 0; }
   .jr-track { width: 45rem; }

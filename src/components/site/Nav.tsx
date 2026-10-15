@@ -11,16 +11,33 @@ export function Nav() {
   const [hidden, setHidden] = useState(false);
   const [ready, setReady] = useState(false);
   const [open, setOpen] = useState(false);
+  const [inHero, setInHero] = useState(true);
   const button = useRef<HTMLButtonElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
   useEffect(() => onReady(() => setReady(true)), []);
 
+  // the hero is nav-free: the bar only appears once the hero has scrolled away
+  const checkHero = (y: number) => {
+    const hero = document.getElementById("top");
+    setInHero(y < (hero?.offsetHeight ?? window.innerHeight) - 80);
+  };
+
+  useEffect(() => {
+    checkHero(scrollY.get());
+    const onResize = () => checkHero(scrollY.get());
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [scrollY]);
+
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
+    checkHero(y);
     setHidden(y > prev && y > 200 && !open);
   });
+
+  const away = inHero && !open;
 
   useEffect(() => {
     if (!open) return;
@@ -64,8 +81,9 @@ export function Nav() {
   return (
     <>
       <motion.header
+        inert={away}
         initial={false}
-        animate={{ y: hidden ? "-120%" : "0%", opacity: ready ? 1 : 0 }}
+        animate={{ y: hidden || away ? "-120%" : "0%", opacity: ready && !away ? 1 : 0 }}
         transition={{ duration: reduce ? 0 : 0.9, ease: expo }}
         className={`fixed inset-x-0 top-0 z-[60] ${open ? "text-ink" : "text-mist mix-blend-difference"}`}
       >
@@ -74,7 +92,7 @@ export function Nav() {
             <Roll>{person.name}</Roll>
           </a>
           <span className={`hidden lg:block ${open ? "text-graphite" : "text-mist"}`}>
-            {person.role}, {person.org}
+            {/* {person.role}, {person.org} */}
           </span>
           <button
             ref={button}
@@ -118,7 +136,7 @@ export function Nav() {
                       animate={{ y: "0%" }}
                       exit={{ y: "105%" }}
                       transition={{ duration: reduce ? 0 : 1.1, delay: reduce ? 0 : 0.25 + i * 0.06, ease: expo }}
-                      className="t-h1 block pb-[0.08em] text-[length:clamp(36px,min(5.6vw,9svh),104px)]"
+                      className="t-h1 block pb-[0.08em] text-[length:clamp(28px,min(3.6vw,6svh),56px)]"
                     >
                       {c.label}
                     </motion.a>

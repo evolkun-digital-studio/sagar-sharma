@@ -81,11 +81,11 @@ export function Contact() {
   };
 
   return (
-    <section ref={root} id="contact" className="relative overflow-hidden bg-bone text-film">
+    <section ref={root} id="contact" className="relative overflow-hidden surface-white">
       <div className="px-5 pt-24 md:px-[5vw] md:pt-32">
         <RevealLines
           as="h3"
-          className="display mt-14 max-w-[11ch] text-[clamp(40px,6vw,96px)] md:mt-20"
+          className="display mt-14 max-w-[28ch] text-[clamp(30px,3.6vw,46px)] md:mt-20"
         >
           Let's build technology that lasts.
         </RevealLines>
@@ -99,15 +99,15 @@ export function Contact() {
                 aria-label={`Email ${person.name} at ${person.email}`}
               >
                 <Mail aria-hidden="true" />
-                <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+                <span className="draw-line pb-1 text-[clamp(16px,1.2vw,19px)] leading-none">
                   {person.email}
                 </span>
               </a>
-              <button
+              {/* <button
                 type="button"
                 onClick={copy}
                 aria-label={copied ? "Email address copied" : "Copy email address"}
-                className="t-mono relative h-8 w-[88px] cursor-pointer overflow-hidden rounded-full border border-hair-dark text-mist-mute transition-colors duration-500 hover:border-mist hover:text-mist"
+                className="t-mono relative h-8 w-[88px] cursor-pointer overflow-hidden rounded-full border border-hair text-mute transition-colors duration-500 hover:border-ink hover:text-ink"
               >
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.span
@@ -121,7 +121,7 @@ export function Contact() {
                     {copied ? "Copied" : "Copy"}
                   </motion.span>
                 </AnimatePresence>
-              </button>
+              </button> */}
             </div>
           </div>
           <div className="ct-row ct-contact-item md:col-span-4">
@@ -133,7 +133,7 @@ export function Contact() {
               aria-label={`Open ${person.name}'s LinkedIn profile`}
             >
               <Linkedin aria-hidden="true" />
-              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+              <span className="draw-line pb-1 text-[clamp(16px,1.2vw,19px)] leading-none">
                 {person.linkedinLabel}
               </span>
             </a>
@@ -145,7 +145,7 @@ export function Contact() {
               aria-label={`Schedule a conversation with ${person.name}`}
             >
               <CalendarDays aria-hidden="true" />
-              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+              <span className="draw-line pb-1 text-[clamp(16px,1.2vw,19px)] leading-none">
                 Schedule a conversation
               </span>
             </a>
@@ -155,7 +155,7 @@ export function Contact() {
 
       <footer className="ct-foot mt-32 md:mt-48">
         <div className="wrap">
-          <div className="t-small flex flex-col gap-3 border-t border-hair-dark pt-6 text-mist-mute md:flex-row md:items-center md:justify-between">
+          <div className="t-small flex flex-col gap-3 border-t border-hair pt-6 text-mute md:flex-row md:items-center md:justify-between">
             <p>
               © {new Date().getFullYear()} {person.name}
             </p>
@@ -165,7 +165,7 @@ export function Contact() {
             <button
               type="button"
               onClick={() => scrollToTarget(0)}
-              className="roll-host cursor-pointer self-start text-mist md:self-auto"
+              className="roll-host cursor-pointer self-start text-ink md:self-auto"
             >
               <Roll>Back to top</Roll>
             </button>
@@ -175,7 +175,7 @@ export function Contact() {
           <p
             ref={giant}
             aria-hidden
-            className="ct-giant display mx-auto w-max text-[12vw] whitespace-nowrap text-film"
+            className="ct-giant display mx-auto w-max text-[7vw] whitespace-nowrap text-ink/90"
             style={{ lineHeight: 0.8 }}
           >
             {person.name}

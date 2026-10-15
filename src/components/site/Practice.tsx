@@ -28,7 +28,7 @@ export function Practice() {
   );
 
   return (
-    <section ref={root} id="practice" className="surface-paper relative pt-(--section-pad) pb-[calc(var(--section-pad)*0.7)]">
+    <section ref={root} id="practice" className="surface-silver relative pt-(--section-pad) pb-[calc(var(--section-pad)*0.7)]">
       <div className="wrap"> 
         <RevealLines as="h3" className="t-h1 mt-14 max-w-[20ch] md:mt-20">
           Eight disciplines that compound.
@@ -74,7 +74,7 @@ export function Writing() {
   const anyLinks = writing.some((w) => w.href);
 
   return (
-    <section ref={root} id="writing" className="surface-paper relative pt-[calc(var(--section-pad)*0.5)] pb-(--section-pad)">
+    <section ref={root} id="writing" className="surface-silver relative pt-[calc(var(--section-pad)*0.5)] pb-(--section-pad)">
       <div className="wrap">
         <ChapterMark label="Writing" />
         <ul className={`${anyLinks ? "dim-group" : ""} mt-14 md:mt-20`}>

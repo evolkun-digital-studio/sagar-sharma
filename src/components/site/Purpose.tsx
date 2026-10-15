@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import stillUrl from "@/assets/sagar-still.webp"; 
+import stillUrl from "@/assets/sagar-sharma.jpeg"; 
 import { gsap, registerGsap, NO_REDUCE } from "./core"; 
 
 registerGsap();
@@ -123,7 +123,7 @@ export function Purpose() {
       ref={root}
       id="purpose"
       aria-labelledby="purpose-heading"
-      className="relative isolate overflow-clip bg-[#F4F2EC] text-[#181A18]"
+      className="relative isolate overflow-clip bg-[#E7E9EC] text-[#181A18]"
     >
       {/* ACT I — The image slowly takes over the entire viewport. */}
       <div data-purpose-scene className="relative lg:h-[225svh]">
@@ -133,12 +133,12 @@ export function Purpose() {
         >
           <div
             data-purpose-intro
-            className="relative z-20 w-full px-6 pt-28 pb-1 sm:px-10 sm:pt-36 lg:absolute lg:top-[20%] lg:left-[6.5%] lg:w-[52%] lg:p-0"
+            className="relative z-20 w-full px-6 pt-28 pb-1 sm:px-10 sm:pt-36 lg:absolute lg:top-[20%] lg:left-[6.5%] lg:w-[72%] lg:p-0"
           >
            
             <h2
               id="purpose-heading"
-              className="font-sans text-[clamp(1.875rem,6vw,2.75rem)] font-normal leading-[1.02] tracking-tighter sm:text-[clamp(2.5rem,6vw,3.5rem)] lg:text-[clamp(2.75rem,3.7vw,4.5rem)]"
+              className="font-sans text-[clamp(1.5rem,5vw,2rem)] font-semibold leading-[1.1] tracking-[-0.02em] sm:text-[clamp(1.75rem,4vw,2.5rem)] lg:text-[clamp(2rem,2.8vw,3.25rem)]"
             >
               <span className="block overflow-hidden pb-[0.07em]">
                 <span data-purpose-line className="block whitespace-nowrap">
@@ -153,7 +153,7 @@ export function Purpose() {
               <span className="block overflow-hidden pb-[0.15em]">
                 <span
                   data-purpose-line
-                  className="block whitespace-nowrap font-normal text-[#B8BFB3]"
+                  className="block whitespace-nowrap font-semibold text-[#B8BFB3]"
                 >
                   Progress is.
                 </span>
@@ -173,9 +173,9 @@ export function Purpose() {
             <img
               data-purpose-image
               src={stillUrl}
-              alt="Sagar Sharma at his desk with the city skyline in the background"
-              className="h-full w-full object-cover object-[60%_50%]"
-              style={{ filter: "saturate(0.7) contrast(1.06)" }}
+              alt="Sagar Sharma presenting on stage at a technology conference"
+              className="h-full w-full object-cover object-[56%_50%]"
+              style={{ filter: "saturate(0.85) contrast(1.04)" }}
               loading="lazy"
               decoding="async"
             />
@@ -186,9 +186,9 @@ export function Purpose() {
 
             <figcaption
               data-purpose-quote
-              className="absolute inset-x-0 bottom-0 z-10 px-6 pb-10 text-[#F5F4EE] sm:px-10 sm:pb-14 lg:px-[8%] lg:pb-[8%] lg:motion-safe:opacity-0"
+              className="absolute inset-x-0 bottom-0 z-10 px-6 pb-1 pt-5 text-[#F5F4EE] sm:px-10 sm:pb-14 lg:px-[8%] lg:pb-[3%] lg:motion-safe:opacity-0"
             >
-              <p className="max-w-[24ch] font-sans text-[clamp(1.375rem,2.6vw,2.5rem)] font-normal leading-[1.18] tracking-[-0.035em]">
+              <p className="max-w-[44ch] font-sans text-[clamp(1.125rem,1.8vw,1.75rem)] font-semibold leading-[1.3] tracking-[-0.015em] ">
                 “Design for the decade, not the quarter.”
               </p>
               <p className="mt-6 text-[10px] font-medium uppercase tracking-[0.22em] text-[#D5D7D0] sm:mt-8 sm:text-[11px]">
@@ -207,7 +207,7 @@ export function Purpose() {
         <div className="grid grid-cols-1 gap-8 pt-10 sm:pt-12 lg:grid-cols-12 lg:items-end lg:gap-x-6 lg:pt-14">
           <h3
             data-purpose-detail
-            className="text-[clamp(1.75rem,3.2vw,3.25rem)] font-normal leading-[1.08] tracking-tighter lg:col-span-7"
+            className="text-[clamp(1.375rem,2.2vw,2.25rem)] font-semibold leading-[1.2] tracking-[-0.02em] lg:col-span-7"
           >
             Less complexity.
             <br />

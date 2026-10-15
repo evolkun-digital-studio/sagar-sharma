@@ -68,7 +68,7 @@ export function Philosophy() {
       ref={root}
       id="philosophy"
       aria-labelledby="philosophy-heading"
-      className="surface-paper section-pad relative"
+      className="surface-white section-pad relative"
     >
       <div className="wrap">
         <div className="grid-12 mt-14 gap-y-10 md:mt-20">
@@ -102,7 +102,7 @@ export function Philosophy() {
                 className="absolute top-0 left-0 h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-700 ease-expo group-hover:scale-x-100 lg:h-full lg:w-px lg:origin-top lg:scale-x-100 lg:scale-y-0 lg:group-hover:scale-y-100"
               />
 
-              <h3 className="overflow-hidden pb-[0.12em] font-medium leading-[1.12] tracking-[-0.02em] text-ink md:col-span-5 text-[clamp(22px,1.9vw,30px)]">
+              <h3 className="overflow-hidden pb-[0.12em] font-semibold leading-[1.2] tracking-[-0.01em] text-ink md:col-span-5 text-[clamp(18px,1.4vw,22px)]">
                 <span className="ph-title block">{p.title}</span>
               </h3>
               <p className="overflow-hidden text-[15px] leading-[1.65] text-graphite md:col-span-6 md:col-start-7 lg:mt-5 lg:max-w-[26ch]">

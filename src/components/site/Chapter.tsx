@@ -23,7 +23,7 @@ export function ChapterMark({ label }: { label: string }) {
   );
   return (
     <div ref={ref} className="t-small flex items-center gap-4 text-(--fg-2)">
-      <h2 className="overflow-hidden font-normal">
+      <h2 className="overflow-hidden font-semibold">
         <span className="cm-t inline-block">{label}</span>
       </h2>
       <span aria-hidden className="cm-rule h-px flex-1 origin-left bg-(--line)" />

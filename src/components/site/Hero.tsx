@@ -95,7 +95,11 @@ export function Hero() {
   useEffect(() => {
     const host = glHost.current!;
     const reduce = prefersReducedMotion();
-    const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: false,
+      alpha: false,
+      powerPreference: "high-performance",
+    });
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     const dpr = Math.min(window.devicePixelRatio, 1.75);
     renderer.setPixelRatio(dpr);
@@ -142,7 +146,13 @@ export function Hero() {
       const f = frameRect(w, h);
       (u.uRect.value as THREE.Vector4).set(f.x, f.y, f.w, f.h);
       const s = subject.current;
-      if (s) Object.assign(s.style, { left: `${f.x}px`, top: `${f.y}px`, width: `${f.w}px`, height: `${f.h}px` });
+      if (s)
+        Object.assign(s.style, {
+          left: `${f.x}px`,
+          top: `${f.y}px`,
+          width: `${f.w}px`,
+          height: `${f.h}px`,
+        });
       const st = stage.current;
       if (st) st.style.transformOrigin = `${f.x + f.w * FACE.x}px ${f.y + f.h * FACE.y}px`;
       rest();
@@ -190,24 +200,50 @@ export function Hero() {
 
       let split: SplitText | null = null;
       const off = onReady(() => {
-        split = SplitText.create(q(".hero-name"), { type: "lines", mask: "lines", linesClass: "line-mask" });
+        split = SplitText.create(q(".hero-name"), {
+          type: "lines",
+          mask: "lines",
+          linesClass: "line-mask",
+        });
         const u = uniforms.current!;
         const tl = gsap.timeline();
         tl.to(u.uReveal, { value: 1, duration: 2.6, ease: "power2.inOut" }, 0)
-          .to(q(".hero-subject"), { autoAlpha: 1, scale: 1, duration: 2.4, ease: "power2.inOut" }, 0.2)
+          .to(
+            q(".hero-subject"),
+            { autoAlpha: 1, scale: 1, duration: 2.4, ease: "power2.inOut" },
+            0.2,
+          )
           .from(split.lines, { yPercent: 105, duration: 1.8, stagger: 0.14, ease: "expo.out" }, 1.0)
-          .to(q(".hero-cap"), { autoAlpha: 1, duration: 1.2, stagger: 0.1, ease: "power2.out" }, 1.6);
+          .to(
+            q(".hero-cap"),
+            { autoAlpha: 1, duration: 1.2, stagger: 0.1, ease: "power2.out" },
+            1.6,
+          );
       });
 
       // push in on the face, then cut to black
       const shot = { v: 0 };
       const st = gsap.timeline({
-        scrollTrigger: { trigger: root.current, start: "top top", end: "+=90%", scrub: 0.8, pin: true },
+        scrollTrigger: {
+          trigger: root.current,
+          start: "top top",
+          end: "+=90%",
+          scrub: 0.8,
+          pin: true,
+        },
       });
       st.to(q(".hero-stage"), { scale: 1.35, ease: "power1.in" }, 0)
-        .to(q(".hero-name-wrap"), { yPercent: -18, autoAlpha: 0, filter: "blur(10px)", ease: "power1.in" }, 0)
+        .to(
+          q(".hero-name-wrap"),
+          { yPercent: -18, autoAlpha: 0, filter: "blur(10px)", ease: "power1.in" },
+          0,
+        )
         .to(q(".hero-cap"), { autoAlpha: 0, y: -20, ease: "none", duration: 0.4 }, 0)
-        .to(q(".hero-subject"), { filter: `${SUBJECT_FILTER} brightness(0.15)`, ease: "power2.in" }, 0.2)
+        .to(
+          q(".hero-subject"),
+          { filter: `${SUBJECT_FILTER} brightness(0.15)`, ease: "power2.in" },
+          0.2,
+        )
         .to(
           shot,
           {
@@ -229,19 +265,24 @@ export function Hero() {
   );
 
   return (
-    <section ref={root} id="top" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-film text-bone">
+    <section
+      ref={root}
+      id="top"
+      className="relative h-[100svh] min-h-[600px] overflow-hidden text-bone"
+    >
       <div ref={stage} className="hero-stage absolute inset-0 will-change-transform">
         <div ref={glHost} aria-hidden className="absolute inset-0" />
         {/* the name lives in the room — between the wall and the man */}
         <div className="hero-name-wrap absolute inset-0 z-30">
           <div className="hero-name-inner absolute bottom-[24svh] left-5 md:top-[30svh] md:bottom-auto md:left-[5vw]">
-            <p className="hero-cap mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-signal">
-              <span className="h-px w-8 bg-signal" />
+            <p className="hero-cap mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-bone/80 md:text-[12px]">
               {person.role}
             </p>
-            <h1 className="hero-name display text-[clamp(54px,16vw,96px)] text-bone md:text-[min(7.2vw,12svh)]">
-              <span className="block">{person.first}</span>
-              <span className="block pl-[0.5em] md:pl-[0.74em]">{person.last}</span>
+            <h1 className="hero-name display text-[clamp(38px,11vw,64px)] text-bone md:text-[min(5vw,9svh)]">
+              <span className="block">
+                {person.first} <span>{person.last}</span>
+              </span>
+              {/* <span className="block pl-[0.5em] md:pl-[-0.44em]">{person.last}</span> */}
             </h1>
           </div>
         </div>
@@ -265,22 +306,16 @@ export function Hero() {
       {/* editorial metadata and one clear next action */}
       <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
         <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
-          <div className="border-l-2 border-signal pl-4">
+          <div className="border-l-2 border-white pl-4">
             <p className="text-bone/80">{person.org}</p>
             <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
-          </div> 
+          </div>
         </div>
 
         <div className="hero-cap flex items-end justify-between gap-8">
           <p className="max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:max-w-[34ch] md:text-[15px]">
             Building technology ecosystems that help businesses scale with confidence.
           </p>
-          <div className="flex items-end gap-4 text-[11px] uppercase tracking-[0.14em] text-bone/60">
-            <span>Scroll to explore</span>
-            <span className="relative block h-10 w-px overflow-hidden bg-bone/20">
-              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_cubic-bezier(.7,0,.2,1)_infinite] bg-signal" />
-            </span>
-          </div>
         </div>
       </div>
       <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } }`}</style>
