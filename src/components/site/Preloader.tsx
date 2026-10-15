@@ -37,8 +37,9 @@ export function Preloader() {
 
     if (prefersReducedMotion() || seenThisTab()) {
       setGone(true);
-      markReady();
-      return;
+      // defer: the hero's WebGL effect runs after this one, and its intro needs it
+      const t = window.setTimeout(markReady, 0);
+      return () => clearTimeout(t);
     }
 
     const el = root.current!;
