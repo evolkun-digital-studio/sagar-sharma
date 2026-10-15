@@ -1,10 +1,17 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import stillUrl from "@/assets/sagar-still.webp";
-import { gsap, registerGsap, revealLines, NO_REDUCE } from "./core";
+import { gsap, registerGsap, NO_REDUCE } from "./core";
 import { RevealLines } from "./Chapter";
 
 registerGsap();
+
+/** The statement, split into the four commitments it makes. Wording is unchanged. */
+const commitments = [
+  { subject: "Technology", claim: "should solve business problems." },
+  { subject: "Every system", claim: "should reduce complexity." },
+  { subject: "Every architecture", claim: "should support growth." },
+  { subject: "Every decision", claim: "should create long-term value." },
+];
 
 export function Purpose() {
   const root = useRef<HTMLElement>(null);
@@ -14,35 +21,15 @@ export function Purpose() {
       const mm = gsap.matchMedia();
       mm.add(NO_REDUCE, () => {
         const q = gsap.utils.selector(root);
-
-        // the still opens from a narrow slit to the full frame
-        gsap
-          .timeline({
-            scrollTrigger: { trigger: q(".still"), start: "top 95%", end: "center 55%", scrub: 1 },
-          })
-          .fromTo(
-            q(".still"),
-            { clipPath: "inset(46% 22% 46% 22%)" },
-            { clipPath: "inset(0% 0% 0% 0%)", ease: "none" },
-            0,
-          )
-          .fromTo(q(".still img"), { scale: 1.25 }, { scale: 1.05, ease: "none" }, 0);
-        gsap.to(q(".still img"), {
-          yPercent: 5,
-          ease: "none",
-          scrollTrigger: {
-            trigger: q(".still"),
-            start: "center 55%",
-            end: "bottom top",
-            scrub: true,
-          },
+        // hairlines draw in from the left as each column arrives
+        q(".pu-rule").forEach((rule) => {
+          gsap.from(rule, {
+            scaleX: 0,
+            duration: 1.4,
+            ease: "expo.inOut",
+            scrollTrigger: { trigger: rule, start: "top 90%" },
+          });
         });
-        const stopSub = revealLines(q(".still-sub")[0] as HTMLElement, {
-          start: "top 72%",
-          duration: 1.2,
-        });
-
-        return () => stopSub();
       });
       return () => mm.revert();
     },
@@ -50,43 +37,50 @@ export function Purpose() {
   );
 
   return (
-    <section ref={root} id="purpose" className="surface-paper section-pad relative">
+    <section ref={root} id="purpose" className="surface-paper section-pad relative font-open">
       <div className="wrap">
-        <RevealLines as="h3" className="t-h1 t-h1-oneline mx-auto max-w-[24ch] text-center text-balance">
+        <p className="text-center text-[14px] leading-none font-medium tracking-[0.01em] text-mute">
+          Purpose
+        </p>
+
+        <RevealLines
+          as="h2"
+          className="mx-auto mt-8 max-w-[22ch] text-center text-[clamp(1.75rem,3.6vw,3.75rem)] leading-[1.12] font-medium tracking-[-0.025em] text-balance text-ink md:mt-10 md:max-w-none md:text-nowrap"
+        >
           Technology should never exist for its own sake.
         </RevealLines>
 
-        <figure className="still relative mt-20 aspect-[4/3] overflow-hidden bg-ink sm:aspect-[21/9] md:mt-32">
-          <img
-            src={stillUrl}
-            alt="Sagar Sharma at his desk, city skyline through the window behind him"
-            className="h-full w-full object-cover object-[62%_50%]"
-            style={{ filter: "saturate(0.85)" }}
-            loading="lazy"
-          />
-          <figcaption className="absolute inset-x-0 bottom-[7%] px-5 text-center text-[15px] leading-snug text-mist">
-            <span className="still-sub inline-block">
-              “Design for the decade, not the quarter.”
-            </span>
-          </figcaption>
-        </figure>
+        <ul className="mt-20 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 md:mt-28 lg:grid-cols-4">
+          {commitments.map((c, i) => (
+            <li key={c.subject} className="relative pt-6">
+              <span
+                aria-hidden
+                className="pu-rule absolute inset-x-0 top-0 h-px origin-left bg-hair"
+              />
+              <RevealLines
+                as="p"
+                delay={i * 0.08}
+                className="text-[15px] leading-[1.5] font-medium text-mute"
+              >
+                {c.subject}
+              </RevealLines>
+              <RevealLines
+                as="p"
+                delay={0.1 + i * 0.08}
+                className="mt-4 max-w-[16ch] text-[clamp(1.375rem,1.9vw,1.875rem)] leading-[1.25] font-medium tracking-[-0.018em] text-ink"
+              >
+                {c.claim}
+              </RevealLines>
+            </li>
+          ))}
+        </ul>
 
-        <div className="grid-12 mt-24 gap-y-14 md:mt-36">
-          <RevealLines as="p" className="t-h2 col-span-12 font-normal text-balance md:col-span-8">
-            Technology should solve business problems. Every system should reduce complexity. Every
-            architecture should support growth. Every decision should create long-term value.
-          </RevealLines>
-          {/* <div className="col-span-12 space-y-6 text-[15px] leading-[1.7] text-graphite md:col-span-3 md:col-start-10 md:pt-3">
-            <p>
-              For over a decade I've helped organizations build scalable architecture, enterprise
-              software, AI systems and secure digital infrastructure that enables long-term growth.
-            </p>
-            <p>
-              The organizations that endure are not the ones with the most sophisticated stack. They
-              are the ones whose technology choices stay coherent as the business evolves.
-            </p>
-          </div> */}
-        </div>
+        <RevealLines
+          as="p"
+          className="mx-auto mt-24 max-w-[34ch] text-center text-[clamp(1.0625rem,1.35vw,1.375rem)] leading-[1.5] font-normal text-graphite md:mt-32"
+        >
+          “Design for the decade, not the quarter.”
+        </RevealLines>
       </div>
     </section>
   );

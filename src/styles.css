@@ -20,12 +20,22 @@
   src: url("./assets/fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
 }
 
+/* Open Sans: used by the Purpose section */
+@font-face {
+  font-family: "Open Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 800;
+  src: url("./assets/fonts/open-sans-latin-wght-normal.woff2") format("woff2-variations");
+}
+
 /* ------------------------------------------------------------------
    Two surfaces (paper / ink), one accent (signal), one typeface.
 ------------------------------------------------------------------- */
 @theme inline {
   --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-open: "Open Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-paper: var(--paper);
