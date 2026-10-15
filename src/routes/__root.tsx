@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import geistUrl from "../assets/fonts/geist-latin-wght-normal.woff2?url";
-import newsreaderUrl from "../assets/fonts/newsreader-latin-opsz-normal.woff2?url";
+import geistMonoUrl from "../assets/fonts/geist-mono-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preload", href: geistUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
-      { rel: "preload", href: newsreaderUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: geistMonoUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),

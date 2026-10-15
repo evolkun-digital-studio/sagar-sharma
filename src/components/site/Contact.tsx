@@ -3,7 +3,7 @@ import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion } from "motion/react";
 import { gsap, registerGsap, prefersReducedMotion, scrollToTarget } from "./core";
 import { ChapterMark, RevealLines } from "./Chapter";
-import { Roll } from "./Magnetic";
+import { Roll } from "./Roll";
 import { person } from "./data";
 
 registerGsap();

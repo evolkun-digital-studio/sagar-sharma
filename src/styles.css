@@ -1,25 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
-/* self-hosted variable fonts (latin subset) */
-@font-face {
-  font-family: "Newsreader";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 200 800;
-  src: url("./assets/fonts/newsreader-latin-opsz-normal.woff2") format("woff2-variations");
-}
-@font-face {
-  font-family: "Newsreader";
-  font-style: italic;
-  font-display: swap;
-  font-weight: 200 800;
-  src: url("./assets/fonts/newsreader-latin-opsz-italic.woff2") format("woff2-variations");
-}
+/* self-hosted variable fonts (latin subset): one family, two cuts */
 @font-face {
   font-family: "Geist";
   font-style: normal;
@@ -27,79 +12,128 @@
   font-weight: 100 900;
   src: url("./assets/fonts/geist-latin-wght-normal.woff2") format("woff2-variations");
 }
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("./assets/fonts/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
+}
 
 /* ------------------------------------------------------------------
-   Charcoal / moonlit silver / signal red.
-   Keep the palette quiet so the photographs carry their natural colour.
+   Two surfaces (paper / ink), one accent (signal), one typeface.
 ------------------------------------------------------------------- */
 @theme inline {
-  --font-sans: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Newsreader", ui-serif, Georgia, serif;
-  --font-display: "Space Grotesk", "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-bone: var(--moonlit);
-  --color-film: var(--charcoal);
-  --color-ash: var(--charcoal-muted);
-  --color-smoke: var(--moonlit-muted);
-  --color-signal: var(--signal-red);
-  --color-rule: var(--rule);
-  --color-rule-dark: var(--rule-dark);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-graphite: var(--graphite);
+  --color-mute: var(--mute);
+  --color-mist: var(--mist);
+  --color-mist-mute: var(--mist-mute);
+  --color-hair: var(--hair);
+  --color-hair-dark: var(--hair-dark);
+  --color-signal: var(--signal);
 
-  /* aliases for the shadcn ui files kept in the project */
-  --color-background: var(--moonlit);
-  --color-foreground: var(--charcoal);
-  --color-muted-foreground: var(--charcoal-muted);
-  --color-accent: var(--signal-red);
-  --color-border: var(--rule);
-  --color-card: var(--moonlit);
-  --color-primary: var(--charcoal);
-  --color-primary-foreground: var(--moonlit);
+  /* legacy aliases so the shadcn ui files keep compiling */
+  --color-bone: var(--paper);
+  --color-film: var(--ink);
+  --color-ash: var(--graphite);
+  --color-smoke: var(--mist-mute);
+  --color-rule: var(--hair);
+  --color-rule-dark: var(--hair-dark);
+
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-muted-foreground: var(--graphite);
+  --color-accent: var(--signal);
+  --color-border: var(--hair);
+  --color-card: var(--paper);
+  --color-primary: var(--ink);
+  --color-primary-foreground: var(--paper);
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-film: cubic-bezier(0.7, 0, 0.2, 1);
 }
 
 :root {
-  --charcoal: #24292e;
-  --charcoal-deep: #101214;
-  --charcoal-muted: #59636c;
-  --moonlit: #cdd2d8;
-  --moonlit-muted: #9ca6af;
-  --signal-red: #d74642;
-  --bone: var(--moonlit);
-  --film: var(--charcoal);
-  --ash: var(--charcoal-muted);
-  --smoke: var(--moonlit-muted);
-  --rule: rgba(23, 26, 29, 0.18);
-  --rule-dark: rgba(213, 217, 222, 0.2);
+  --paper: #f4f4f1;
+  --ink: #0e0f11;
+  --graphite: #3a3e44;
+  --mute: #686d75;
+  --mist: #ededea;
+  --mist-mute: #9a9fa7;
+  --hair: rgba(14, 15, 17, 0.1);
+  --hair-dark: rgba(237, 237, 234, 0.12);
+  --signal: #c23b33;
+  --signal-on-ink: #e5534b;
   --radius: 0px;
+
+  /* type scale */
+  --t-display: clamp(56px, 9vw, 168px);
+  --t-h1: clamp(40px, 5.6vw, 104px);
+  --t-h2: clamp(28px, 3vw, 52px);
+  --t-h3: clamp(20px, 1.6vw, 26px);
+  --t-body: 17px;
+  --t-small: 14px;
+  --t-mono: 13px;
+
+  /* layout */
+  --gutter: max(20px, 5vw);
+  --col-gap: 24px;
+  --max-w: 1600px;
+  --section-pad: clamp(112px, 14vw, 208px);
+}
+
+/* surfaces: each section picks one, text tokens follow */
+.surface-paper {
+  --fg: var(--ink);
+  --fg-2: var(--graphite);
+  --fg-3: var(--mute);
+  --line: var(--hair);
+  background-color: var(--paper);
+  color: var(--ink);
+}
+.surface-ink {
+  --fg: var(--mist);
+  --fg-2: var(--mist-mute);
+  --fg-3: var(--mist-mute);
+  --line: var(--hair-dark);
+  --signal: var(--signal-on-ink);
+  background-color: var(--ink);
+  color: var(--mist);
 }
 
 @layer base {
   * {
-    border-color: var(--rule);
+    border-color: var(--hair);
   }
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    background: var(--film);
+    background: var(--ink);
   }
   body {
-    background-color: var(--film);
-    color: var(--film);
+    background-color: var(--ink);
+    color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: var(--t-body);
+    font-weight: 400;
+    line-height: 1.65;
+    letter-spacing: -0.005em;
     overflow-x: clip;
   }
   ::selection {
-    background: var(--signal-red);
-    color: var(--bone);
+    background: var(--signal);
+    color: var(--paper);
   }
   :focus-visible {
-    outline: 2px solid var(--signal-red);
-    outline-offset: 5px;
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
   }
   img {
     user-select: none;
@@ -119,37 +153,75 @@ html.lenis body {
   overflow: clip;
 }
 
-/* editorial serif display */
-.serif {
-  font-family: var(--font-serif);
-  font-optical-sizing: auto;
-  font-weight: 340;
-  letter-spacing: -0.02em;
-}
-.display {
-  font-family: var(--font-display);
+/* ---------- type scale ---------- */
+.t-display {
+  font-size: var(--t-display);
   font-weight: 500;
-  line-height: 0.96;
-  letter-spacing: -0.055em;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+.t-h1 {
+  font-size: var(--t-h1);
+  font-weight: 500;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+}
+.t-h2 {
+  font-size: var(--t-h2);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.t-h3 {
+  font-size: var(--t-h3);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.t-body {
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.005em;
+  max-width: 62ch;
+}
+.t-small {
+  font-size: var(--t-small);
+  font-weight: 400;
+  line-height: 1.5;
+}
+.t-mono {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  font-weight: 400;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
 }
 
-.text-signal { color: var(--signal-red); }
-.bg-signal { background-color: var(--signal-red); }
-.border-signal { border-color: var(--signal-red); }
-
-.draw-line:hover,
-.draw-line:focus-visible {
-  color: var(--signal-red);
+/* ---------- layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max-w) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--col-gap);
+}
+.section-pad {
+  padding-block: var(--section-pad);
 }
 
 /* masked line produced by SplitText */
 .line-mask {
   overflow: clip;
-  padding: 0 0.06em 0.08em;
-  margin: 0 -0.06em -0.08em;
+  padding: 0 0.06em 0.1em;
+  margin: 0 -0.06em -0.1em;
 }
 
-/* hover: label rolls into a copy of itself */
+/* hover: label rolls into a copy of itself (buttons, nav) */
 .roll {
   position: relative;
   display: inline-flex;
@@ -158,7 +230,7 @@ html.lenis body {
 }
 .roll > span {
   display: block;
-  transition: transform 0.7s var(--ease-expo);
+  transition: transform 0.6s var(--ease-expo);
 }
 .roll > span + span {
   position: absolute;
@@ -174,38 +246,43 @@ html.lenis body {
   transform: translateY(0);
 }
 
-/* underline that draws in from the left */
+/* links: a signal underline that draws in from the left */
 .draw-line {
-  background-image: linear-gradient(currentColor, currentColor);
+  background-image: linear-gradient(var(--signal), var(--signal));
   background-size: 0% 1px;
   background-repeat: no-repeat;
   background-position: 0 100%;
-  transition: background-size 0.8s var(--ease-expo);
+  transition: background-size 0.6s var(--ease-expo);
 }
 .draw-line:hover,
 .draw-line:focus-visible,
-.group:hover .draw-line {
+.draw-host:hover .draw-line,
+.draw-host:focus-visible .draw-line {
   background-size: 100% 1px;
 }
 
-/* grain sits over everything */
-.grain {
-  position: fixed;
-  inset: -50%;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.09;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  animation: grain 0.9s steps(5) infinite;
+/* rows that dim their siblings on hover (desktop pointers only) */
+@media (hover: hover) and (min-width: 768px) {
+  .dim-group:hover > .dim-item {
+    opacity: 0.3;
+  }
+  .dim-group:hover > .dim-item:hover {
+    opacity: 1;
+  }
 }
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-4%, 3%); }
-  40% { transform: translate(3%, -5%); }
-  60% { transform: translate(-5%, -2%); }
-  80% { transform: translate(4%, 4%); }
-  100% { transform: translate(0, 0); }
+.dim-item {
+  transition: opacity 0.6s var(--ease-expo);
+}
+
+/* shifting text sits on an inner span: GSAP never animates an element with a CSS transition */
+.shift {
+  display: inline-block;
+  transition: transform 0.6s var(--ease-expo);
+}
+@media (hover: hover) {
+  .shift-host:hover .shift {
+    transform: translateX(8px);
+  }
 }
 
 /* preloader failsafe if scripts never run */
@@ -217,7 +294,6 @@ html.lenis body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grain { animation: none; }
   .preloader { display: none; }
   *, *::before, *::after {
     transition-duration: 0.01ms !important;

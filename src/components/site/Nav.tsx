@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { getLenis, onReady, prefersReducedMotion } from "./core";
-import { Roll } from "./Magnetic";
+import { Roll } from "./Roll";
 import { chapters, person } from "./data";
 
 const ease = [0.7, 0, 0.2, 1] as const;

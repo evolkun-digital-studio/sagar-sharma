@@ -11,7 +11,7 @@ export function SmoothScroll() {
     let tick: ((t: number) => void) | null = null;
 
     if (!prefersReducedMotion()) {
-      lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 1, smoothWheel: true });
+      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, smoothWheel: true });
       setLenis(lenis);
       lenis.on("scroll", ScrollTrigger.update);
       tick = (t: number) => lenis!.raf(t * 1000);
