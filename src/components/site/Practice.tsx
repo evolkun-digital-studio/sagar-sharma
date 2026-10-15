@@ -29,8 +29,7 @@ export function Practice() {
 
   return (
     <section ref={root} id="practice" className="surface-paper relative pt-(--section-pad) pb-[calc(var(--section-pad)*0.7)]">
-      <div className="wrap">
-        <ChapterMark label="Practice" />
+      <div className="wrap"> 
         <RevealLines as="h3" className="t-h1 mt-14 max-w-[20ch] md:mt-20">
           Eight disciplines that compound.
         </RevealLines>

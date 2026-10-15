@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import stillUrl from "@/assets/sagar-still.webp";
-import { gsap, registerGsap, NO_REDUCE } from "./core";
+import stillUrl from "@/assets/sagar-still.webp"; 
+import { gsap, registerGsap, NO_REDUCE } from "./core"; 
 
 registerGsap();
 

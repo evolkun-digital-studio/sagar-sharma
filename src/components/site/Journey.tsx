@@ -1,142 +1,313 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, ScrollTrigger, registerGsap, revealLines, NO_REDUCE } from "./core";
-import { ChapterMark } from "./Chapter";
+import { gsap, registerGsap, prefersReducedMotion } from "./core";
 import { journey } from "./data";
 
 registerGsap();
 
-const YEARS = [2012, 2016, 2019, 2023, new Date().getFullYear()];
-const pad = (n: number) => String(n).padStart(2, "0");
+const YEAR_LABELS = journey.map(({ years }) => {
+  const year = years.match(/\d{4}/)?.[0];
+  return year ?? years.toUpperCase();
+});
 
-/** Four rolling digit columns, like a mechanical counter. */
-function Odometer({ value }: { value: number }) {
-  const digits = String(value).split("").map(Number);
+function Arrow({ direction }: { direction: "previous" | "next" }) {
+  const next = direction === "next";
   return (
-    <div
-      className="odo flex font-mono text-[72px] leading-none font-light tracking-normal tabular-nums md:text-[clamp(80px,13vw,200px)]"
-      aria-label={String(value)}
-      role="img"
-    >
-      {digits.map((d, i) => (
-        <span key={i} className="relative inline-block h-[1em] overflow-hidden" aria-hidden>
-          <span className="odo-strip flex flex-col" data-digit={d} style={{ transform: `translateY(${-d * 10}%)` }}>
-            {Array.from({ length: 10 }, (_, k) => (
-              <span key={k} className="block h-[1em] leading-none">
-                {k}
-              </span>
-            ))}
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d={next ? "M5 12h13M14 7l5 5-5 5" : "M19 12H6m4-5-5 5 5 5"} />
+    </svg>
+  );
+}
+
+function RollingYear() {
+  return (
+    <div className="jr-year" aria-live="polite" aria-atomic="true">
+      <span className="sr-only jr-year-accessible">{YEAR_LABELS[0]}</span>
+      <div className="jr-year-reel" aria-hidden="true">
+        {YEAR_LABELS.map((label) => (
+          <span className="jr-year-cell" key={label}>
+            {label}
           </span>
-        </span>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
 
 export function Journey() {
   const root = useRef<HTMLElement>(null);
+  const trackViewport = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const navigate = useRef<(index: number) => void>(() => undefined);
   const [active, setActive] = useState(0);
 
   useGSAP(
     () => {
-      const q = gsap.utils.selector(root);
-      const mm = gsap.matchMedia();
+      const section = root.current;
+      const viewport = trackViewport.current;
+      const trackElement = track.current;
+      if (!section || !viewport || !trackElement) return;
 
-      // reduced motion: the counter jumps instead of rolling
-      const roll = (i: number, instant: boolean) => {
-        setActive(i);
-        const target = String(YEARS[i]).split("").map(Number);
-        q(".odo-strip").forEach((strip, k) => {
-          gsap.to(strip, {
-            yPercent: -target[k] * 10,
-            duration: instant ? 0 : 1.4,
-            delay: instant ? 0 : k * 0.07,
-            ease: "expo.inOut",
+      const reduce = prefersReducedMotion();
+      const panels = gsap.utils.toArray<HTMLElement>(".jr-panel", section);
+      const reel = section.querySelector<HTMLElement>(".jr-year-reel");
+      const liveYear = section.querySelector<HTMLElement>(".jr-year-accessible");
+      let current = 0;
+      let transition: gsap.core.Timeline | null = null;
+      let wheelTotal = 0;
+      let wheelReset: ReturnType<typeof setTimeout> | undefined;
+      let wheelLocked = false;
+      let dragging = false;
+      let dragStart = 0;
+      let dragLast = 0;
+      let dragLastTime = 0;
+      let dragVelocity = 0;
+
+      const targetX = (index: number) => {
+        const overflow = Math.max(0, trackElement.scrollWidth - viewport.clientWidth);
+        return -overflow * (index / (journey.length - 1));
+      };
+
+      const targetYearY = (index: number) => {
+        const cell = reel?.querySelector<HTMLElement>(".jr-year-cell");
+        return cell ? -cell.offsetHeight * index : 0;
+      };
+
+      const normalizePanels = (visibleIndex: number) => {
+        panels.forEach((panel, index) => {
+          gsap.set(panel, {
+            autoAlpha: index === visibleIndex ? 1 : 0,
+            y: 0,
+            pointerEvents: index === visibleIndex ? "auto" : "none",
+          });
+        });
+      };
+
+      const goTo = (requestedIndex: number) => {
+        const next = gsap.utils.clamp(0, journey.length - 1, requestedIndex);
+        if (next === current) {
+          gsap.to(trackElement, {
+            x: targetX(current),
+            duration: reduce ? 0 : 0.55,
+            ease: "power3.out",
             overwrite: true,
           });
-        });
-      };
-      // strips start positioned by inline transform; hand control to GSAP
-      q(".odo-strip").forEach((s) => {
-        const d = Number((s as HTMLElement).dataset.digit);
-        gsap.set(s, { clearProps: "transform" });
-        gsap.set(s, { yPercent: -d * 10 });
-      });
+          return;
+        }
 
-      const watch = (instant: boolean) => {
-        q(".jr-entry").forEach((entry, i) => {
-          ScrollTrigger.create({
-            trigger: entry,
-            start: "top 55%",
-            end: "bottom 55%",
-            onEnter: () => roll(i, instant),
-            onEnterBack: () => roll(i, instant),
-          });
+        const previous = current;
+        current = next;
+        transition?.kill();
+        gsap.killTweensOf([trackElement, reel, ...panels]);
+        normalizePanels(previous);
+        setActive(next);
+        if (liveYear) liveYear.textContent = YEAR_LABELS[next];
+
+        const outgoing = panels[previous];
+        const incoming = panels[next];
+        const headingWords = incoming.querySelectorAll<HTMLElement>(".jr-heading-word > span");
+        const supporting = incoming.querySelectorAll<HTMLElement>(".jr-supporting");
+        const description = incoming.querySelector<HTMLElement>(".jr-description");
+
+        if (reduce) {
+          gsap.set(trackElement, { x: targetX(next) });
+          if (reel) gsap.set(reel, { y: targetYearY(next) });
+          normalizePanels(next);
+          gsap.set([headingWords, supporting, description], { clearProps: "all" });
+          return;
+        }
+
+        gsap.set(incoming, { autoAlpha: 1, y: 0, pointerEvents: "auto" });
+        gsap.set(headingWords, { yPercent: 112 });
+        gsap.set(supporting, { y: 15, autoAlpha: 0 });
+        if (description) gsap.set(description, { y: 10, autoAlpha: 0 });
+
+        transition = gsap.timeline({
+          defaults: { overwrite: "auto" },
+          onComplete: () => {
+            normalizePanels(next);
+            transition = null;
+          },
         });
+
+        transition
+          .to(outgoing, { y: -12, autoAlpha: 0, duration: 0.3, ease: "power3.in" }, 0)
+          .to(trackElement, { x: targetX(next), duration: 0.9, ease: "power3.inOut" }, 0)
+          .to(reel, { y: targetYearY(next), duration: 0.95, ease: "expo.inOut" }, 0.02)
+          .to(headingWords, { yPercent: 0, duration: 0.72, stagger: 0.045, ease: "expo.out" }, 0.38)
+          .to(
+            supporting,
+            { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.07, ease: "power3.out" },
+            0.48,
+          )
+          .to(description, { y: 0, autoAlpha: 1, duration: 0.72, ease: "power3.out" }, 0.58);
       };
 
-      mm.add(NO_REDUCE, () => {
-        watch(false);
-        const stops: Array<() => void> = [];
-        q(".jr-entry").forEach((entry) => {
-          entry.querySelectorAll<HTMLElement>(".jr-in").forEach((el, k) => {
-            stops.push(revealLines(el, { start: "top 78%", delay: k * 0.07, duration: 1.2 }));
-          });
-        });
-        gsap.fromTo(
-          q(".jr-progress"),
-          { scaleY: 0 },
-          { scaleY: 1, ease: "none", scrollTrigger: { trigger: q(".jr-list")[0], start: "top 55%", end: "bottom 55%", scrub: true } },
-        );
-        return () => stops.forEach((s) => s());
+      navigate.current = goTo;
+      normalizePanels(0);
+      gsap.set(trackElement, { x: targetX(0) });
+      if (reel) gsap.set(reel, { y: targetYearY(0) });
+
+      const resizeObserver = new ResizeObserver(() => {
+        gsap.set(trackElement, { x: targetX(current) });
+        if (reel) gsap.set(reel, { y: targetYearY(current) });
       });
-      mm.add("(prefers-reduced-motion: reduce)", () => {
-        watch(true);
-      });
-      return () => mm.revert();
+      resizeObserver.observe(viewport);
+      resizeObserver.observe(trackElement);
+
+      const onPointerDown = (event: PointerEvent) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        if ((event.target as HTMLElement).closest("button")) return;
+        dragging = true;
+        dragStart = event.clientX;
+        dragLast = event.clientX;
+        dragLastTime = performance.now();
+        dragVelocity = 0;
+        transition?.kill();
+        gsap.killTweensOf(trackElement);
+        viewport.classList.add("is-dragging");
+        viewport.setPointerCapture(event.pointerId);
+      };
+
+      const onPointerMove = (event: PointerEvent) => {
+        if (!dragging) return;
+        const now = performance.now();
+        const elapsed = Math.max(1, now - dragLastTime);
+        dragVelocity = (event.clientX - dragLast) / elapsed;
+        dragLast = event.clientX;
+        dragLastTime = now;
+        const delta = event.clientX - dragStart;
+        const minimum = targetX(journey.length - 1) - 54;
+        const maximum = 54;
+        gsap.set(trackElement, { x: gsap.utils.clamp(minimum, maximum, targetX(current) + delta) });
+      };
+
+      const finishDrag = (event: PointerEvent) => {
+        if (!dragging) return;
+        dragging = false;
+        viewport.classList.remove("is-dragging");
+        if (viewport.hasPointerCapture(event.pointerId))
+          viewport.releasePointerCapture(event.pointerId);
+        const distance = event.clientX - dragStart;
+        const shouldMove = Math.abs(distance) > 48 || Math.abs(dragVelocity) > 0.45;
+        if (shouldMove) goTo(current + (distance < 0 ? 1 : -1));
+        else goTo(current);
+      };
+
+      const onWheel = (event: WheelEvent) => {
+        const horizontal =
+          Math.abs(event.deltaX) > Math.abs(event.deltaY) * 1.15 && Math.abs(event.deltaX) > 3;
+        if (!horizontal) return;
+        const direction = event.deltaX > 0 ? 1 : -1;
+        const canMove = direction > 0 ? current < journey.length - 1 : current > 0;
+        if (!canMove) return;
+
+        event.preventDefault();
+        if (wheelLocked) return;
+        wheelTotal += event.deltaX;
+        clearTimeout(wheelReset);
+        wheelReset = setTimeout(() => (wheelTotal = 0), 180);
+        if (Math.abs(wheelTotal) >= 44) {
+          goTo(current + (wheelTotal > 0 ? 1 : -1));
+          wheelTotal = 0;
+          wheelLocked = true;
+          setTimeout(() => (wheelLocked = false), 620);
+        }
+      };
+
+      viewport.addEventListener("pointerdown", onPointerDown);
+      viewport.addEventListener("pointermove", onPointerMove);
+      viewport.addEventListener("pointerup", finishDrag);
+      viewport.addEventListener("pointercancel", finishDrag);
+      viewport.addEventListener("wheel", onWheel, { passive: false });
+
+      return () => {
+        transition?.kill();
+        clearTimeout(wheelReset);
+        resizeObserver.disconnect();
+        viewport.removeEventListener("pointerdown", onPointerDown);
+        viewport.removeEventListener("pointermove", onPointerMove);
+        viewport.removeEventListener("pointerup", finishDrag);
+        viewport.removeEventListener("pointercancel", finishDrag);
+        viewport.removeEventListener("wheel", onWheel);
+        navigate.current = () => undefined;
+      };
     },
     { scope: root },
   );
 
   return (
-    <section ref={root} id="journey" className="surface-paper section-pad relative">
-      <div className="wrap">
-        <ChapterMark label="Journey" />
-
-        <div className="grid-12 mt-14 md:mt-24">
-          <div className="sticky top-0 z-10 col-span-12 -mx-(--gutter) bg-paper px-(--gutter) pt-16 pb-5 md:static md:col-span-6 md:mx-0 md:bg-transparent md:p-0">
-            <div className="md:sticky md:top-[16svh]">
-              <Odometer value={YEARS[0]} />
-              <div className="mt-4 flex items-baseline gap-6 md:mt-6">
-                <span className="t-small text-mute">{journey[active].yearsLong}</span>
-                <span className="t-mono text-mute" aria-live="polite">
-                  {pad(active + 1)} / {pad(journey.length)}
-                </span>
+    <section ref={root} id="journey" className="journey-explorer" aria-label="Journey">
+      <div className="jr-stage">
+        <div className="jr-year-wrap">
+          <RollingYear />
+        </div>
+        <div className="jr-content" aria-live="polite">
+          {journey.map((milestone, index) => (
+            <article
+              className="jr-panel"
+              data-panel={index}
+              aria-hidden={active !== index}
+              key={milestone.kicker}
+            >
+              <p className="jr-supporting jr-period">{milestone.yearsLong}</p>
+              <h3 className="jr-kicker">
+                {milestone.kicker.split(" ").map((word, wordIndex) => (
+                  <span className="jr-heading-word" key={`${word}-${wordIndex}`}>
+                    <span>{word}&nbsp;</span>
+                  </span>
+                ))}
+              </h3>
+              <div className="jr-supporting jr-position">
+                <p>{milestone.role}</p>
+                {milestone.org && <p>{milestone.org}</p>}
               </div>
+              <p className="jr-description">{milestone.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="jr-timeline-shell">
+        <div className="jr-track-viewport" ref={trackViewport}>
+          <div className="jr-track" ref={track}>
+            <span className="jr-track-line" aria-hidden="true" />
+            <div className="jr-markers">
+              {journey.map((milestone, index) => (
+                <button
+                  type="button"
+                  className={`jr-marker${active === index ? " is-active" : ""}`}
+                  onClick={() => navigate.current(index)}
+                  aria-label={`${milestone.yearsLong}: ${milestone.kicker}`}
+                  aria-current={active === index ? "step" : undefined}
+                  key={milestone.kicker}
+                >
+                  <span className="jr-marker-dot" aria-hidden="true" />
+                  <span className="jr-marker-label">{YEAR_LABELS[index]}</span>
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="jr-list relative col-span-12 md:col-span-5 md:col-start-8">
-            <span aria-hidden className="absolute top-0 bottom-0 left-0 hidden w-px bg-hair md:block">
-              <span className="jr-progress absolute inset-0 origin-top bg-ink" />
-            </span>
-            {journey.map((j, i) => (
-              <article
-                key={j.kicker}
-                className={`jr-entry flex min-h-[56svh] flex-col justify-center border-t border-hair py-14 transition-opacity duration-700 md:min-h-[72svh] md:border-t-0 md:pl-12 ${
-                  active === i ? "opacity-100" : "md:opacity-35"
-                }`}
-              >
-                <p className="jr-in t-small text-mute">{j.yearsLong}</p>
-                <h3 className="jr-in t-h2 mt-4">{j.kicker}</h3>
-                <p className="jr-in mt-5 text-[17px] leading-[1.5]">
-                  {j.role}
-                  {j.org && <span className="text-graphite">, {j.org}</span>}
-                </p>
-                <p className="jr-in mt-4 max-w-[46ch] text-[17px] leading-[1.65] text-graphite">{j.body}</p>
-              </article>
-            ))}
-          </div>
+        </div>
+
+        <div className="jr-controls" aria-label="Journey timeline controls">
+          <button
+            type="button"
+            onClick={() => navigate.current(active - 1)}
+            disabled={active === 0}
+            aria-label="Previous milestone"
+          >
+            <Arrow direction="previous" />
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate.current(active + 1)}
+            disabled={active === journey.length - 1}
+            aria-label="Next milestone"
+          >
+            <Arrow direction="next" />
+          </button>
         </div>
       </div>
     </section>

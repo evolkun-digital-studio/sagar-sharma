@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion } from "motion/react";
+import { CalendarDays, Linkedin, Mail } from "lucide-react";
 import { gsap, registerGsap, scrollToTarget, NO_REDUCE } from "./core";
 import { ChapterMark, RevealLines } from "./Chapter";
 import { Roll } from "./Roll";
@@ -34,14 +35,34 @@ export function Contact() {
         const q = gsap.utils.selector(root);
         q(".ct-row").forEach((row, i) => {
           gsap
-            .timeline({ scrollTrigger: { trigger: q(".ct-rows")[0], start: "top 88%" }, delay: i * 0.08 })
-            .from(row.querySelector(".ct-rule"), { scaleX: 0, duration: 1.4, ease: "expo.inOut" }, 0)
-            .from(row.querySelectorAll(".ct-in"), { yPercent: 125, duration: 1.2, stagger: 0.08, ease: "expo.out" }, 0.2);
+            .timeline({
+              scrollTrigger: { trigger: q(".ct-rows")[0], start: "top 88%" },
+              delay: i * 0.08,
+            })
+            .from(
+              row.querySelector(".ct-rule"),
+              { scaleX: 0, duration: 1.4, ease: "expo.inOut" },
+              0,
+            )
+            .from(
+              row.querySelectorAll(".ct-in"),
+              { yPercent: 125, duration: 1.2, stagger: 0.08, ease: "expo.out" },
+              0.2,
+            );
         });
         gsap.fromTo(
           q(".ct-giant"),
           { yPercent: 100 },
-          { yPercent: 0, ease: "none", scrollTrigger: { trigger: q(".ct-foot"), start: "top bottom", end: "bottom bottom", scrub: true } },
+          {
+            yPercent: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: q(".ct-foot"),
+              start: "top bottom",
+              end: "bottom bottom",
+              scrub: true,
+            },
+          },
         );
       });
       return () => mm.revert();
@@ -60,25 +81,28 @@ export function Contact() {
   };
 
   return (
-    <section ref={root} id="contact" className="surface-ink relative overflow-hidden">
-      <div className="wrap pt-(--section-pad)">
-        <ChapterMark label="Contact" />
-        <RevealLines as="h3" className="t-display mt-14 max-w-[11ch] md:mt-20">
+    <section ref={root} id="contact" className="relative overflow-hidden bg-bone text-film">
+      <div className="px-5 pt-24 md:px-[5vw] md:pt-32">
+        <RevealLines
+          as="h3"
+          className="display mt-14 max-w-[11ch] text-[clamp(40px,6vw,96px)] md:mt-20"
+        >
           Let's build technology that lasts.
         </RevealLines>
 
-        <div className="ct-rows grid-12 mt-20 gap-y-12 md:mt-32">
-          <div className="ct-row relative col-span-12 pt-6 md:col-span-6">
-            <span aria-hidden className="ct-rule absolute inset-x-0 top-0 h-px origin-left bg-hair-dark" />
-            <div className="overflow-hidden">
-              <p className="ct-in t-small text-mist-mute">Email</p>
-            </div>
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
-              <div className="overflow-hidden pb-[0.14em]">
-                <a href={`mailto:${person.email}`} className="ct-in t-h2 draw-line inline-block pb-1">
+        <div className="ct-rows mt-20 grid grid-cols-1 justify-items-center gap-14 md:mt-32 md:grid-cols-12 md:gap-8">
+          <div className="ct-row ct-contact-item md:col-span-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+              <a
+                href={`mailto:${person.email}`}
+                className="ct-contact-link"
+                aria-label={`Email ${person.name} at ${person.email}`}
+              >
+                <Mail aria-hidden="true" />
+                <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
                   {person.email}
-                </a>
-              </div>
+                </span>
+              </a>
               <button
                 type="button"
                 onClick={copy}
@@ -100,30 +124,31 @@ export function Contact() {
               </button>
             </div>
           </div>
-          <div className="ct-row relative col-span-12 pt-6 md:col-span-3">
-            <span aria-hidden className="ct-rule absolute inset-x-0 top-0 h-px origin-left bg-hair-dark" />
-            <div className="overflow-hidden">
-              <p className="ct-in t-small text-mist-mute">LinkedIn</p>
-            </div>
-            <div className="mt-4 overflow-hidden pb-[0.14em]">
-              <a href={person.linkedin} target="_blank" rel="noreferrer" className="ct-in t-h3 draw-line inline-block pb-1">
+          <div className="ct-row ct-contact-item md:col-span-4">
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="ct-contact-link"
+              aria-label={`Open ${person.name}'s LinkedIn profile`}
+            >
+              <Linkedin aria-hidden="true" />
+              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
                 {person.linkedinLabel}
-              </a>
-            </div>
+              </span>
+            </a>
           </div>
-          <div className="ct-row relative col-span-12 pt-6 md:col-span-3">
-            <span aria-hidden className="ct-rule absolute inset-x-0 top-0 h-px origin-left bg-hair-dark" />
-            <div className="overflow-hidden">
-              <p className="ct-in t-small text-mist-mute">Meetings</p>
-            </div>
-            <div className="mt-4 overflow-hidden pb-[0.14em]">
-              <a
-                href={`mailto:${person.email}?subject=Conversation%20request`}
-                className="ct-in t-h3 draw-line inline-block pb-1"
-              >
+          <div className="ct-row ct-contact-item md:col-span-4">
+            <a
+              href={`mailto:${person.email}?subject=Conversation%20request`}
+              className="ct-contact-link"
+              aria-label={`Schedule a conversation with ${person.name}`}
+            >
+              <CalendarDays aria-hidden="true" />
+              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
                 Schedule a conversation
-              </a>
-            </div>
+              </span>
+            </a>
           </div>
         </div>
       </div>
@@ -146,11 +171,11 @@ export function Contact() {
             </button>
           </div>
         </div>
-        <div className="overflow-hidden pt-8">
+        <div className="overflow-hidden pt-8 pb-[clamp(28px,4vw,56px)]">
           <p
             ref={giant}
             aria-hidden
-            className="ct-giant mx-auto w-max text-[12vw] font-medium tracking-[-0.045em] whitespace-nowrap text-mist"
+            className="ct-giant display mx-auto w-max text-[12vw] whitespace-nowrap text-film"
             style={{ lineHeight: 0.8 }}
           >
             {person.name}
