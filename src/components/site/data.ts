@@ -11,6 +11,7 @@ export const person = {
 };
 
 export const chapters = [
+  { href: "#philosophy", label: "Technology Philosophy" },
   { href: "#purpose", label: "Purpose" },
   { href: "#group", label: "The Group" },
   { href: "#journey", label: "Journey" },
@@ -18,6 +19,29 @@ export const chapters = [
   { href: "#practice", label: "Practice" },
   { href: "#writing", label: "Writing" },
   { href: "#contact", label: "Contact" },
+];
+
+export const philosophy = [
+  {
+    title: "Systems Before Tools",
+    body: "Design systems that remain effective regardless of technology trends.",
+  },
+  {
+    title: "Security By Design",
+    body: "Security should be embedded from day one, not added later.",
+  },
+  {
+    title: "Automation Over Repetition",
+    body: "Remove manual effort wherever intelligent automation can improve outcomes.",
+  },
+  {
+    title: "Scalability First",
+    body: "Build foundations capable of supporting future growth.",
+  },
+  {
+    title: "Data-Driven Decisions",
+    body: "Technology decisions should be guided by measurable outcomes.",
+  },
 ];
 
 export const focusAreas = [

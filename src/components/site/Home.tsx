@@ -2,6 +2,7 @@ import { SmoothScroll } from "./SmoothScroll";
 import { Preloader } from "./Preloader";
 import { Nav } from "./Nav";
 import { Hero } from "./Hero";
+import { Philosophy } from "./Philosophy";
 import { Purpose } from "./Purpose";
 import { Group } from "./Group";
 import { Journey } from "./Journey";
@@ -17,12 +18,13 @@ export function Home() {
       <Nav />
       <main>
         <Hero />
+        <Philosophy />
         <Purpose />
         <Group />
         <Journey />
         <Principles />
         <Practice />
-        <Writing />
+        {/* <Writing /> */}
         <Contact />
       </main>
     </>
