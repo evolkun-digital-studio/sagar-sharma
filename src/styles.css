@@ -74,7 +74,7 @@
 
   /* type scale */
   --t-display: clamp(56px, 9vw, 168px);
-  --t-h1: clamp(40px, 5.6vw, 104px);
+  --t-h1: clamp(40px, 3vw, 64px);
   --t-h2: clamp(28px, 3vw, 52px);
   --t-h3: clamp(20px, 1.6vw, 26px);
   --t-body: 17px;

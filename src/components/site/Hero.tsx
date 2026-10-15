@@ -268,8 +268,7 @@ export function Hero() {
           <div className="border-l-2 border-signal pl-4">
             <p className="text-bone/80">{person.org}</p>
             <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
-          </div>
-          <p className="hidden text-right text-bone/45 md:block">Independent technology portfolio</p>
+          </div> 
         </div>
 
         <div className="hero-cap flex items-end justify-between gap-8">
