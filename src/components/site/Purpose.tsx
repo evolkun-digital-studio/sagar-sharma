@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import stillUrl from "@/assets/sagar-still.webp";
-import { gsap, SplitText, registerGsap, revealLines, NO_REDUCE } from "./core";
+import { gsap, registerGsap, revealLines, NO_REDUCE } from "./core";
 import { RevealLines } from "./Chapter";
 
 registerGsap();
@@ -42,33 +42,7 @@ export function Purpose() {
           duration: 1.2,
         });
 
-        // reading scrub on the statement paragraph
-        let split: SplitText | null = null;
-        let dead = false;
-        document.fonts.ready.then(() => {
-          if (dead) return;
-          split = SplitText.create(q(".scrub"), { type: "words" });
-          gsap.fromTo(
-            split.words,
-            { opacity: 0.15 },
-            {
-              opacity: 1,
-              stagger: 0.1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: q(".scrub"),
-                start: "top 80%",
-                end: "bottom 55%",
-                scrub: true,
-              },
-            },
-          );
-        });
-        return () => {
-          dead = true;
-          stopSub();
-          split?.revert();
-        };
+        return () => stopSub();
       });
       return () => mm.revert();
     },
@@ -98,10 +72,10 @@ export function Purpose() {
         </figure>
 
         <div className="grid-12 mt-24 gap-y-14 md:mt-36">
-          <p className="scrub t-h2 col-span-12 font-normal md:col-span-8">
+          <RevealLines as="p" className="t-h2 col-span-12 font-normal text-balance md:col-span-8">
             Technology should solve business problems. Every system should reduce complexity. Every
             architecture should support growth. Every decision should create long-term value.
-          </p>
+          </RevealLines>
           {/* <div className="col-span-12 space-y-6 text-[15px] leading-[1.7] text-graphite md:col-span-3 md:col-start-10 md:pt-3">
             <p>
               For over a decade I've helped organizations build scalable architecture, enterprise
