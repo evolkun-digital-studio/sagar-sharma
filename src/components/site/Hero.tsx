@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import * as THREE from "three";
 import plateUrl from "@/assets/sagar-plate.webp";
-import subjectUrl from "@/assets/sagar-subject1.webp";
-import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion, isFinePointer, NO_REDUCE } from "./core";
-import { person } from "./data";
+import subjectUrl from "@/assets/sagar-subject.webp";
+import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion } from "./core";
+import { focusAreas, person } from "./data";
 
 registerGsap();
 
@@ -61,10 +61,7 @@ const frag = /* glsl */ `
     if (uv.x >= 0.0 && uv.x <= 1.0 && uv.y >= 0.0 && uv.y <= 1.0) {
       vec3 rgb = texture2D(uTex, vec2(uv.x, 1.0 - uv.y)).rgb;
       float l = dot(rgb, vec3(0.299, 0.587, 0.114));
-      // calmer grade: saturation x0.85, a very slight cool lift in the shadows
-      vec3 graded = mix(vec3(l), rgb, 0.85);
-      graded += vec3(-0.004, 0.003, 0.012) * (1.0 - smoothstep(0.0, 0.45, l));
-      vec3 base = mix(graded, vec3(l), uMono);
+      vec3 base = mix(rgb, vec3(l), uMono);
       // the room is kept low; a soft key light follows the pointer
       float d = distance(p, uLight) / uRes.y;
       float spot = smoothstep(0.62, 0.0, d);
@@ -85,16 +82,14 @@ const frag = /* glsl */ `
   }
 `;
 
-const SUBJECT_FILTER = "saturate(0.85) contrast(1.03)";
+const SUBJECT_FILTER = "saturate(1.04) contrast(1.03)";
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const glHost = useRef<HTMLDivElement>(null);
-  const subject = useRef<HTMLDivElement>(null);
+  const subject = useRef<HTMLImageElement>(null);
   const uniforms = useRef<Record<string, THREE.IUniform> | null>(null);
-  /** pointer position over the hero in css px, or null when at rest */
-  const pointer = useRef<{ x: number; y: number } | null>(null);
 
   /* ---------------- WebGL plate ---------------- */
   useEffect(() => {
@@ -104,7 +99,7 @@ export function Hero() {
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     const dpr = Math.min(window.devicePixelRatio, 1.75);
     renderer.setPixelRatio(dpr);
-    renderer.setClearColor(0x0e0f11, 1);
+    renderer.setClearColor(0x24292e, 1);
     host.appendChild(renderer.domElement);
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
 
@@ -135,12 +130,8 @@ export function Hero() {
     const rest = () => {
       const r = u.uRect.value as THREE.Vector4;
       // static light: a backlight on the wall behind his head
-      const rx = r.x + r.z * (FACE.x + 0.1);
-      const ry = r.y + r.w * (FACE.y - 0.12);
-      const p = pointer.current;
-      // barely perceptible: the light leans toward the cursor, it does not chase it
-      light.tx = p ? rx + (p.x - rx) * 0.35 : rx;
-      light.ty = p ? ry + (p.y - ry) * 0.35 : ry;
+      light.tx = r.x + r.z * (FACE.x + 0.1);
+      light.ty = r.y + r.w * (FACE.y - 0.12);
     };
 
     const resize = () => {
@@ -169,7 +160,6 @@ export function Hero() {
       // skip drawing while the hero is scrolled out of view
       const b = host.getBoundingClientRect();
       if (b.bottom <= 0 || b.top >= window.innerHeight) return;
-      rest();
       light.x += (light.tx - light.x) * 0.06;
       light.y += (light.ty - light.y) * 0.06;
       (u.uLight.value as THREE.Vector2).set(light.x, light.y);
@@ -192,147 +182,109 @@ export function Hero() {
   /* ---------------- choreography ---------------- */
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
-      mm.add(NO_REDUCE, () => {
-        const q = gsap.utils.selector(root);
+      if (prefersReducedMotion()) return;
+      const q = gsap.utils.selector(root);
 
-        gsap.set(q(".hero-subject"), { autoAlpha: 0, scale: 1.04 });
-        gsap.set(q(".hero-cap"), { autoAlpha: 0 });
+      gsap.set(q(".hero-subject"), { autoAlpha: 0, scale: 1.04 });
+      gsap.set(q(".hero-cap"), { autoAlpha: 0 });
 
-        let split: SplitText | null = null;
-        const off = onReady(() => {
-          split = SplitText.create(q(".hero-name"), { type: "lines", mask: "lines", linesClass: "split-line" });
-          const u = uniforms.current!;
-          gsap
-            .timeline()
-            .to(u.uReveal, { value: 1, duration: 2.4, ease: "power2.inOut" }, 0)
-            .to(q(".hero-subject"), { autoAlpha: 1, scale: 1, duration: 2.2, ease: "power2.inOut" }, 0.2)
-            .from(split.lines, { yPercent: 105, duration: 1.6, stagger: 0.12, ease: "expo.out" }, 0.9)
-            .to(q(".hero-cap"), { autoAlpha: 1, duration: 1.2, stagger: 0.1, ease: "power2.out" }, 1.8);
-        });
-
-        // pinned scroll-out: push in on his face, the room goes to ink
-        const shot = { v: 0 };
-        gsap
-          .timeline({ scrollTrigger: { trigger: root.current, start: "top top", end: "+=90%", scrub: 0.8, pin: true } })
-          .to(q(".hero-stage"), { scale: 1.3, ease: "power1.in" }, 0)
-          .to(q(".hero-name-wrap"), { yPercent: -18, autoAlpha: 0, filter: "blur(10px)", ease: "power1.in" }, 0)
-          .to(q(".hero-cap"), { autoAlpha: 0, y: -20, ease: "none", duration: 0.4 }, 0)
-          .to(q(".hero-dim"), { opacity: 0.85, ease: "power2.in" }, 0.2)
-          .to(
-            shot,
-            {
-              v: 1,
-              ease: "power2.in",
-              onUpdate: () => {
-                if (uniforms.current) uniforms.current.uScroll.value = shot.v;
-              },
-            },
-            0,
-          );
-
-        // subtle pointer parallax and key light, fine pointers only
-        let unbind = () => {};
-        if (isFinePointer()) {
-          const el = root.current!;
-          const sx = gsap.quickTo(q(".hero-subject-img")[0], "x", { duration: 1.4, ease: "power3.out" });
-          const sy = gsap.quickTo(q(".hero-subject-img")[0], "y", { duration: 1.4, ease: "power3.out" });
-          const nx = gsap.quickTo(q(".hero-name-inner")[0], "x", { duration: 1.4, ease: "power3.out" });
-          const ny = gsap.quickTo(q(".hero-name-inner")[0], "y", { duration: 1.4, ease: "power3.out" });
-          const move = (e: PointerEvent) => {
-            const r = el.getBoundingClientRect();
-            const px = (e.clientX - r.left) / r.width - 0.5;
-            const py = (e.clientY - r.top) / r.height - 0.5;
-            sx(px * 24);
-            sy(py * 24);
-            nx(px * -36);
-            ny(py * -36);
-            pointer.current = { x: e.clientX - r.left, y: e.clientY - r.top };
-          };
-          const leave = () => {
-            sx(0);
-            sy(0);
-            nx(0);
-            ny(0);
-            pointer.current = null;
-          };
-          el.addEventListener("pointermove", move);
-          el.addEventListener("pointerleave", leave);
-          unbind = () => {
-            el.removeEventListener("pointermove", move);
-            el.removeEventListener("pointerleave", leave);
-            pointer.current = null;
-          };
-        }
-
-        return () => {
-          off();
-          unbind();
-          split?.revert();
-        };
+      let split: SplitText | null = null;
+      const off = onReady(() => {
+        split = SplitText.create(q(".hero-name"), { type: "lines", mask: "lines", linesClass: "line-mask" });
+        const u = uniforms.current!;
+        const tl = gsap.timeline();
+        tl.to(u.uReveal, { value: 1, duration: 2.6, ease: "power2.inOut" }, 0)
+          .to(q(".hero-subject"), { autoAlpha: 1, scale: 1, duration: 2.4, ease: "power2.inOut" }, 0.2)
+          .from(split.lines, { yPercent: 105, duration: 1.8, stagger: 0.14, ease: "expo.out" }, 1.0)
+          .to(q(".hero-cap"), { autoAlpha: 1, duration: 1.2, stagger: 0.1, ease: "power2.out" }, 1.6);
       });
-      return () => mm.revert();
+
+      // push in on the face, then cut to black
+      const shot = { v: 0 };
+      const st = gsap.timeline({
+        scrollTrigger: { trigger: root.current, start: "top top", end: "+=90%", scrub: 0.8, pin: true },
+      });
+      st.to(q(".hero-stage"), { scale: 1.35, ease: "power1.in" }, 0)
+        .to(q(".hero-name-wrap"), { yPercent: -18, autoAlpha: 0, filter: "blur(10px)", ease: "power1.in" }, 0)
+        .to(q(".hero-cap"), { autoAlpha: 0, y: -20, ease: "none", duration: 0.4 }, 0)
+        .to(q(".hero-subject"), { filter: `${SUBJECT_FILTER} brightness(0.15)`, ease: "power2.in" }, 0.2)
+        .to(
+          shot,
+          {
+            v: 1,
+            ease: "power2.in",
+            onUpdate: () => {
+              if (uniforms.current) uniforms.current.uScroll.value = shot.v;
+            },
+          },
+          0,
+        );
+
+      return () => {
+        off();
+        split?.revert();
+      };
     },
     { scope: root },
   );
 
   return (
-    <section ref={root} id="top" className="surface-ink relative h-[100svh] min-h-[600px] overflow-hidden">
+    <section ref={root} id="top" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-film text-bone">
       <div ref={stage} className="hero-stage absolute inset-0 will-change-transform">
-        <div ref={glHost} aria-hidden className="absolute inset-0 z-0" />
-
-        {/* left legibility gradient */}
-        <div
-          aria-hidden
-          className="absolute inset-y-0 left-0 z-[5] w-full max-md:bg-linear-to-b max-md:from-ink/70 max-md:via-ink/5 max-md:to-ink/70 md:w-[62%] md:bg-linear-to-r md:from-ink/70 md:via-ink/25 md:to-transparent"
-        />
-
-        {/* the name lives in the room: behind him on desktop, in front on mobile */}
-        <div className="hero-name-wrap absolute inset-0 z-30 md:z-10">
-          <div className="hero-name-inner absolute bottom-[26svh] left-(--gutter) md:top-[30svh] md:bottom-auto">
-            <h1 className="hero-name t-display text-mist">
+        <div ref={glHost} aria-hidden className="absolute inset-0" />
+        {/* the name lives in the room — between the wall and the man */}
+        <div className="hero-name-wrap absolute inset-0 z-30">
+          <div className="hero-name-inner absolute bottom-[24svh] left-5 md:top-[30svh] md:bottom-auto md:left-[5vw]">
+            <p className="hero-cap mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-signal">
+              <span className="h-px w-8 bg-signal" />
+              {person.role}
+            </p>
+            <h1 className="hero-name display text-[clamp(54px,16vw,96px)] text-bone md:text-[min(7.2vw,12svh)]">
               <span className="block">{person.first}</span>
-              <span className="block pl-[0.5em] md:pl-[2.4em]">{person.last}</span>
+              <span className="block pl-[0.5em] md:pl-[0.74em]">{person.last}</span>
             </h1>
           </div>
         </div>
 
-        <div ref={subject} className="hero-subject absolute z-20">
-          <img
-            src={subjectUrl}
-            alt="Sagar Sharma, Chief Technology Officer of SR18 Group"
-            width={1248}
-            height={832}
-            fetchPriority="high"
-            className="hero-subject-img h-full w-full max-w-none will-change-transform"
-            style={{ filter: SUBJECT_FILTER }}
-          />
-        </div>
-
-        {/* darkens the subject as the pinned hero scrolls out */}
-        <div aria-hidden className="hero-dim pointer-events-none absolute inset-0 z-[25] bg-ink opacity-0" />
+        {/* <img
+          ref={subject}
+          src={subjectUrl}
+          alt="Sagar Sharma, Chief Technology Officer of SR18 Group"
+          width={1248}
+          height={832}
+          fetchPriority="high"
+          className="hero-subject absolute z-20 max-w-none will-change-transform"
+          style={{
+            left: 0,
+            top: 0,
+            filter: `${SUBJECT_FILTER} brightness(1)`,
+          }}
+        /> */}
       </div>
 
-      {/* captions */}
-      <div className="pointer-events-none absolute inset-0 z-40">
-        <div className="wrap flex h-full flex-col justify-between pt-24 pb-6 md:pt-28 md:pb-8">
-          <p className="hero-cap t-small text-mist-mute">
-            {person.role}, {person.org}
+      {/* editorial metadata and one clear next action */}
+      <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
+        <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
+          <div className="border-l-2 border-signal pl-4">
+            <p className="text-bone/80">{person.org}</p>
+            <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
+          </div>
+          <p className="hidden text-right text-bone/45 md:block">Independent technology portfolio</p>
+        </div>
+
+        <div className="hero-cap flex items-end justify-between gap-8">
+          <p className="max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:max-w-[34ch] md:text-[15px]">
+            Building technology ecosystems that help businesses scale with confidence.
           </p>
-          <div className="hero-cap flex items-end justify-between gap-8">
-            <p className="text-[17px] leading-[1.5] text-mist max-w-[34ch]">
-              Building technology ecosystems that help businesses scale with confidence.
-            </p>
-            <div className="t-small flex items-end gap-4 text-mist-mute">
-              <span>Scroll</span>
-              <span aria-hidden className="relative block h-10 w-px overflow-hidden bg-hair-dark">
-                <span className="hero-cue absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_cubic-bezier(.7,0,.2,1)_infinite] bg-signal" />
-              </span>
-            </div>
+          <div className="flex items-end gap-4 text-[11px] uppercase tracking-[0.14em] text-bone/60">
+            <span>Scroll to explore</span>
+            <span className="relative block h-10 w-px overflow-hidden bg-bone/20">
+              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_cubic-bezier(.7,0,.2,1)_infinite] bg-signal" />
+            </span>
           </div>
         </div>
       </div>
-      <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } } @media (prefers-reduced-motion: reduce) { .hero-cue { animation: none } }`}</style>
+      <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } }`}</style>
     </section>
   );
 }
