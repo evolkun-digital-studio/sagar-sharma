@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { AnimatePresence, motion } from "motion/react";
+import { CalendarDays, Linkedin, Mail } from "lucide-react";
 import { gsap, registerGsap, prefersReducedMotion, scrollToTarget } from "./core";
-import { ChapterMark, RevealLines } from "./Chapter";
+import { RevealLines } from "./Chapter";
 import { Roll } from "./Magnetic";
 import { person } from "./data";
 
@@ -61,17 +62,22 @@ export function Contact() {
   return (
     <section ref={root} id="contact" className="relative overflow-hidden bg-bone text-film">
       <div className="px-5 pt-24 md:px-[5vw] md:pt-32">
-        <ChapterMark label="Contact" />
         <RevealLines as="h3" className="display mt-14 max-w-[11ch] text-[clamp(40px,6vw,96px)] md:mt-20">
           Let's build technology that lasts.
         </RevealLines>
 
-        <div className="ct-rows mt-20 grid grid-cols-1 gap-12 md:mt-32 md:grid-cols-12 md:gap-8">
-          <div className="ct-row md:col-span-6">
-            <p className="text-[12px] text-signal">Email</p>
-            <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-3">
-              <a href={`mailto:${person.email}`} className="draw-line serif pb-1 text-[clamp(24px,2.6vw,42px)] leading-none">
-                {person.email}
+        <div className="ct-rows mt-20 grid grid-cols-1 justify-items-center gap-14 md:mt-32 md:grid-cols-12 md:gap-8">
+          <div className="ct-row ct-contact-item md:col-span-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3">
+              <a
+                href={`mailto:${person.email}`}
+                className="ct-contact-link"
+                aria-label={`Email ${person.name} at ${person.email}`}
+              >
+                <Mail aria-hidden="true" />
+                <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+                  {person.email}
+                </span>
               </a>
               <button
                 type="button"
@@ -93,19 +99,30 @@ export function Contact() {
               </button>
             </div>
           </div>
-          <div className="ct-row md:col-span-3">
-            <p className="text-[12px] text-signal">LinkedIn</p>
-            <a href={person.linkedin} target="_blank" rel="noreferrer" className="draw-line serif mt-3 inline-block pb-1 text-[clamp(20px,1.6vw,28px)] leading-none">
-              {person.linkedinLabel}
+          <div className="ct-row ct-contact-item md:col-span-4">
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="ct-contact-link"
+              aria-label={`Open ${person.name}'s LinkedIn profile`}
+            >
+              <Linkedin aria-hidden="true" />
+              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+                {person.linkedinLabel}
+              </span>
             </a>
           </div>
-          <div className="ct-row md:col-span-3">
-            <p className="text-[12px] text-signal">Meetings</p>
+          <div className="ct-row ct-contact-item md:col-span-4">
             <a
               href={`mailto:${person.email}?subject=Conversation%20request`}
-              className="draw-line serif mt-3 inline-block pb-1 text-[clamp(20px,1.6vw,28px)] leading-none"
+              className="ct-contact-link"
+              aria-label={`Schedule a conversation with ${person.name}`}
             >
-              Schedule a conversation
+              <CalendarDays aria-hidden="true" />
+              <span className="draw-line serif pb-1 text-[clamp(18px,1.55vw,24px)] leading-none">
+                Schedule a conversation
+              </span>
             </a>
           </div>
         </div>
@@ -121,12 +138,12 @@ export function Contact() {
             <Roll>Back to top</Roll>
           </button>
         </div>
-        <div className="overflow-hidden pt-8">
+        <div className="overflow-hidden pt-8 pb-[clamp(28px,4vw,56px)]">
           <p
             ref={giant}
             aria-hidden
             className="ct-giant display mx-auto w-max text-[12vw] whitespace-nowrap text-film"
-            style={{ lineHeight: 0.8, marginBottom: "-0.04em" }}
+            style={{ lineHeight: 0.8 }}
           >
             {person.name}
           </p>

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap, prefersReducedMotion } from "./core";
-import { ChapterMark, RevealLines } from "./Chapter";
+import { RevealLines } from "./Chapter";
 import { expertise, writing } from "./data";
 
 registerGsap();
@@ -26,7 +26,6 @@ export function Practice() {
 
   return (
     <section ref={root} id="practice" className="relative bg-bone px-5 pt-24 pb-20 text-film md:px-[5vw] md:pt-32 md:pb-28">
-      <ChapterMark label="Practice" />
       <RevealLines as="h3" className="display mt-14 max-w-[14ch] text-[clamp(36px,4.6vw,76px)] md:mt-20">
         Eight disciplines that compound.
       </RevealLines>
@@ -63,7 +62,6 @@ export function Writing() {
 
   return (
     <section ref={root} id="writing" className="relative bg-bone px-5 pt-20 pb-32 text-film md:px-[5vw] md:pt-28 md:pb-44">
-      <ChapterMark label="Writing" />
       <ul className="group/wr mt-16 md:mt-24">
         {writing.map((w, i) => (
           <li key={w.title} className="wr-row relative transition-opacity duration-700 group-hover/wr:opacity-30 hover:!opacity-100">

@@ -188,6 +188,212 @@ html.lenis body {
   background-size: 100% 1px;
 }
 
+/* Journey — horizontal editorial history explorer */
+/* Contact — centered icon links */
+.ct-contact-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.ct-contact-link {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: var(--film);
+}
+
+.ct-contact-link > svg {
+  width: 1.55rem;
+  height: 1.55rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.55;
+}
+
+.ct-contact-link:focus-visible {
+  border-radius: 0.15rem;
+  outline: 2px solid var(--film);
+  outline-offset: 0.4rem;
+}
+
+@media (max-width: 767px) {
+  .ct-contact-link {
+    flex-wrap: wrap;
+  }
+}
+
+.journey-explorer {
+  --jr-ink: #1b252b;
+  --jr-muted: #6b777e;
+  --jr-rule: #c5cdd1;
+  --jr-active: #1b3444;
+  --jr-accent: #edf1f2;
+  position: relative;
+  min-height: clamp(46rem, 100dvh, 62rem);
+  overflow: hidden;
+  background: #f8f8f6;
+  color: var(--jr-ink);
+  padding: clamp(5.5rem, 9vw, 8rem) max(1.25rem, 5vw) clamp(2rem, 4vw, 3.5rem);
+}
+
+.jr-stage {
+  display: grid;
+  grid-template-columns: minmax(19rem, 0.88fr) minmax(24rem, 1.12fr);
+  gap: clamp(4rem, 9vw, 10rem);
+  align-items: end;
+  width: min(100%, 92rem);
+  min-height: clamp(26rem, 54vh, 34rem);
+  margin: 0 auto;
+  padding: clamp(5rem, 11vh, 8.5rem) 0 clamp(3rem, 7vh, 5.5rem);
+}
+
+.jr-year-wrap { align-self: end; }
+.jr-period {
+  color: var(--jr-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.jr-year {
+  height: 0.84em;
+  overflow: hidden;
+  color: var(--jr-active);
+  font-family: var(--font-display);
+  font-size: clamp(5.5rem, 10.7vw, 11.5rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.075em;
+  line-height: 0.84;
+}
+.jr-year-reel { will-change: transform; }
+.jr-year-cell { display: block; height: 0.84em; white-space: nowrap; }
+
+.jr-content { position: relative; min-height: clamp(21rem, 42vh, 27rem); }
+.jr-panel { position: absolute; inset: auto 0 0; will-change: transform, opacity; }
+.jr-period { margin-bottom: clamp(1.2rem, 2.2vw, 1.8rem); }
+.jr-kicker {
+  max-width: 15ch;
+  color: var(--jr-ink);
+  font-family: var(--font-serif);
+  font-size: clamp(2.7rem, 4.4vw, 5rem);
+  font-optical-sizing: auto;
+  font-weight: 350;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+  text-wrap: balance;
+}
+.jr-heading-word { display: inline-block; overflow: hidden; margin-bottom: -0.16em; padding-bottom: 0.16em; vertical-align: top; }
+.jr-heading-word > span { display: inline-block; will-change: transform; }
+.jr-position {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  max-width: 38rem;
+  margin-top: clamp(1.8rem, 3vw, 2.8rem);
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--jr-rule);
+  color: var(--jr-ink);
+  font-size: clamp(0.78rem, 1vw, 0.9rem);
+  line-height: 1.45;
+}
+.jr-position p:last-child { color: var(--jr-muted); }
+.jr-description {
+  max-width: 57ch;
+  margin-top: clamp(1.4rem, 2.5vw, 2.25rem);
+  color: var(--jr-muted);
+  font-size: clamp(0.88rem, 1.08vw, 1rem);
+  line-height: 1.72;
+  text-wrap: pretty;
+}
+
+.jr-timeline-shell { position: relative; padding-right: 7.5rem; }
+.jr-track-viewport { overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
+.jr-track-viewport.is-dragging { cursor: grabbing; }
+.jr-track {
+  position: relative;
+  width: 100%;
+  height: 5.5rem;
+  padding: 0 0.75rem;
+  will-change: transform;
+}
+.jr-track-line { position: absolute; top: 1.45rem; right: 0.75rem; left: 0.75rem; height: 1px; background: var(--jr-rule); }
+.jr-markers { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; }
+.jr-marker { position: relative; min-width: 2.75rem; height: 5.5rem; color: var(--jr-muted); cursor: pointer; }
+.jr-marker:first-child { justify-self: start; }
+.jr-marker:last-child { justify-self: end; }
+.jr-marker-dot {
+  position: absolute;
+  top: 1.45rem;
+  left: 50%;
+  width: 0.58rem;
+  height: 0.58rem;
+  border: 1px solid var(--jr-muted);
+  border-radius: 50%;
+  background: #f8f8f6;
+  transform: translate(-50%, -50%);
+  transition: width 350ms var(--ease-expo), height 350ms var(--ease-expo), background-color 350ms ease, border-color 350ms ease;
+}
+.jr-marker-label {
+  position: absolute;
+  top: 2.45rem;
+  left: 50%;
+  font-size: 0.64rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  transform: translateX(-50%);
+  transition: color 350ms ease;
+}
+.jr-marker:hover, .jr-marker:focus-visible, .jr-marker.is-active { color: var(--jr-active); }
+.jr-marker.is-active .jr-marker-dot {
+  width: 1rem;
+  height: 1rem;
+  border-color: var(--jr-active);
+  background: var(--jr-active);
+  box-shadow: 0 0 0 0.32rem var(--jr-accent);
+}
+
+.jr-controls { position: absolute; top: -0.42rem; right: 0; display: flex; gap: 0.55rem; }
+.jr-controls button {
+  display: grid;
+  width: 2.9rem;
+  height: 2.9rem;
+  place-items: center;
+  border: 1px solid var(--jr-active);
+  border-radius: 50%;
+  color: var(--jr-active);
+  transition: color 250ms ease, background-color 250ms ease, opacity 250ms ease;
+}
+.jr-controls button:not(:disabled):hover { background: var(--jr-active); color: #f8f8f6; }
+.jr-controls button:active:not(:disabled) { transform: translateY(1px); }
+.jr-controls button:disabled { border-color: var(--jr-rule); color: var(--jr-rule); cursor: not-allowed; opacity: 0.7; }
+.jr-controls svg { width: 1.05rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.35; }
+@media (max-width: 767px) {
+  .journey-explorer { min-height: 55rem; padding-top: 5.5rem; padding-bottom: 2.25rem; }
+  .jr-stage { display: block; min-height: 37rem; padding: 4.75rem 0 2.75rem; }
+  .jr-year { font-size: clamp(5rem, 25vw, 7.25rem); }
+  .jr-content { min-height: 23.5rem; margin-top: 3.75rem; }
+  .jr-panel { inset: 0 0 auto; }
+  .jr-kicker { max-width: 12ch; font-size: clamp(2.55rem, 11.5vw, 3.7rem); }
+  .jr-position { grid-template-columns: 1fr; gap: 0.2rem; }
+  .jr-timeline-shell { padding-right: 0; }
+  .jr-track { width: 45rem; }
+  .jr-controls { top: auto; right: 0; bottom: -3.4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-year-reel, .jr-track, .jr-panel, .jr-heading-word > span { will-change: auto; }
+}
+
 /* grain sits over everything */
 .grain {
   position: fixed;

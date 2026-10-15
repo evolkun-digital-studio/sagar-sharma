@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap } from "./core";
-import { ChapterMark } from "./Chapter";
 import { principles } from "./data";
 
 registerGsap();
@@ -27,7 +26,7 @@ export function Principles() {
           scrollTrigger: {
             trigger: sec,
             start: "top top",
-            end: () => `+=${window.innerHeight * n * 0.85}`,
+            end: () => `+=${window.innerHeight * Math.max(1, n - 1) * 0.85}`,
             pin: true,
             scrub: 1,
           },
@@ -75,8 +74,6 @@ export function Principles() {
       />
 
       <div className="relative flex h-full flex-col px-5 pt-24 pb-8 md:px-[5vw] md:pt-28 md:pb-10">
-        <ChapterMark label="Principles" />
-
         <ol className="pr-stack mt-12 space-y-12">
           {principles.map((p) => (
             <li key={p} className="pr-item text-center">

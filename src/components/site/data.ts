@@ -76,7 +76,6 @@ export const journey = [
 export const principles = [
   "Technology should simplify complexity.",
   "Architecture should scale with the business.",
-  "Security begins with design.",
   "AI should empower people.",
   "Innovation without execution has no value.",
   "Business outcomes matter more than technology choices.",

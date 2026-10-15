@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap, prefersReducedMotion } from "./core";
-import { ChapterMark, RevealLines } from "./Chapter";
+import { RevealLines } from "./Chapter";
 import { focusAreas, industries } from "./data";
 
 registerGsap();
@@ -26,8 +26,6 @@ export function Group() {
 
   return (
     <section ref={root} id="group" className="relative bg-bone px-5 py-24 text-film md:px-[5vw] md:py-32">
-      <ChapterMark label="The Group" />
-
       <div className="mt-16 grid grid-cols-1 gap-10 md:mt-24 md:grid-cols-12">
         <RevealLines as="h3" className="display max-w-[12ch] text-[clamp(34px,4.6vw,72px)] md:col-span-8">
           One architecture across five industries.

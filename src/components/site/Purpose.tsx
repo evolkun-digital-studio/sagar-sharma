@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import stillUrl from "@/assets/sagar-still.webp";
 import { gsap, SplitText, registerGsap, prefersReducedMotion } from "./core";
-import { ChapterMark, RevealLines } from "./Chapter";
+import { RevealLines } from "./Chapter";
 
 registerGsap();
 
@@ -54,8 +54,6 @@ export function Purpose() {
 
   return (
     <section ref={root} id="purpose" className="relative bg-bone px-5 pt-24 pb-32 text-film md:px-[5vw] md:pt-32 md:pb-48">
-      <ChapterMark label="Purpose" />
-
       <RevealLines as="h3" className="display mt-14 max-w-[13ch] text-[clamp(36px,4.8vw,78px)] md:mt-20">
         Technology should never exist for its own sake.
       </RevealLines>
