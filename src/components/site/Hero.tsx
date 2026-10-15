@@ -238,7 +238,9 @@ export function Hero() {
           { yPercent: -18, autoAlpha: 0, filter: "blur(10px)", ease: "power1.in" },
           0,
         )
-        .to(q(".hero-cap"), { autoAlpha: 0, y: -20, ease: "none", duration: 0.4 }, 0)
+        // fade the caption wrapper, not the .hero-cap items: the intro owns their opacity,
+        // and a scrubbed tween on them would restore their pre-intro value (0) on the way back up
+        .to(q(".hero-caps"), { autoAlpha: 0, y: -20, ease: "none", duration: 0.4 }, 0)
         .to(
           q(".hero-subject"),
           { filter: `${SUBJECT_FILTER} brightness(0.15)`, ease: "power2.in" },
@@ -304,7 +306,7 @@ export function Hero() {
       </div>
 
       {/* editorial metadata and one clear next action */}
-      <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
+      <div className="hero-caps pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
         <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
           <div className="border-l-2 border-white pl-4">
             <p className="text-bone/80">{person.org}</p>
