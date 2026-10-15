@@ -214,11 +214,12 @@ html.lenis body {
   padding-block: var(--section-pad);
 }
 
-/* masked line produced by SplitText */
-.line-mask {
-  overflow: clip;
-  padding: 0 0.06em 0.1em;
-  margin: 0 -0.06em -0.1em;
+/* SplitText masks: leave room for descenders so they are not clipped */
+.split-line-mask {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+  padding-inline: 0.06em;
+  margin-inline: -0.06em;
 }
 
 /* hover: label rolls into a copy of itself (buttons, nav) */

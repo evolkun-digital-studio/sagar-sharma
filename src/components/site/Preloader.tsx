@@ -1,14 +1,33 @@
 import { useEffect, useRef, useState } from "react";
-import { animate, createTimeline, stagger } from "animejs";
-import { gsap, getLenis, markReady, prefersReducedMotion } from "./core";
+import { animate } from "animejs";
+import { getLenis, markReady, prefersReducedMotion } from "./core";
 import { person } from "./data";
 
+const SEEN_KEY = "sr18:intro-seen";
+
+const seenThisTab = () => {
+  try {
+    return sessionStorage.getItem(SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+};
+const rememberSeen = () => {
+  try {
+    sessionStorage.setItem(SEEN_KEY, "1");
+  } catch {
+    /* storage unavailable: the intro simply plays again next time */
+  }
+};
+
 /**
- * Opening titles. Two black bars hold the screen while the credits run
- * (anime.js), then they part into a letterbox and open onto the hero (GSAP).
+ * Opening title, under 1.8s. The name rises out of a mask while a hairline fills
+ * (anime.js), then the ink panel wipes upward onto the hero.
  */
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null);
+  const name = useRef<HTMLSpanElement>(null);
+  const bar = useRef<HTMLSpanElement>(null);
   const count = useRef<HTMLSpanElement>(null);
   const [gone, setGone] = useState(false);
 
@@ -16,7 +35,7 @@ export function Preloader() {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
 
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || seenThisTab()) {
       setGone(true);
       markReady();
       return;
@@ -26,82 +45,65 @@ export function Preloader() {
     const lenis = getLenis();
     lenis?.stop();
 
-    const q = (s: string) => el.querySelectorAll<HTMLElement>(s);
+    const timers: number[] = [];
     const counter = { v: 0 };
 
-    const tl = createTimeline({ defaults: { ease: "outExpo" } });
-    tl.add(q(".pl-present span"), { opacity: [0, 1], filter: ["blur(8px)", "blur(0px)"], duration: 900, delay: stagger(22) }, 200)
-      .add(q(".pl-present"), { opacity: [1, 0], filter: ["blur(0px)", "blur(6px)"], duration: 600, ease: "inQuad" }, 1500)
-      .add(
-        q(".pl-name span"),
-        { opacity: [0, 1], filter: ["blur(14px)", "blur(0px)"], translateY: ["0.25em", "0em"], duration: 1300, delay: stagger(45) },
-        1900,
-      )
-      .add(q(".pl-role"), { opacity: [0, 1], duration: 800, ease: "outQuad" }, 2500);
+    const wipe = () => {
+      el.style.transition = "clip-path 1s cubic-bezier(0.7, 0, 0.2, 1)";
+      el.style.clipPath = "inset(0 0 100% 0)";
+      // hero intro overlaps the last 60% of the wipe
+      timers.push(window.setTimeout(markReady, 400));
+      timers.push(
+        window.setTimeout(() => {
+          rememberSeen();
+          setGone(true);
+          lenis?.start();
+        }, 1000),
+      );
+    };
 
-    animate(counter, {
+    const rise = animate(name.current!, { translateY: ["105%", "0%"], duration: 800, delay: 60, ease: "outExpo" });
+    const fill = animate(counter, {
       v: 100,
-      duration: 3300,
-      ease: "inOutSine",
+      duration: 800,
+      ease: "inOutQuad",
       onUpdate: () => {
         if (count.current) count.current.textContent = String(Math.round(counter.v)).padStart(3, "0");
+        if (bar.current) bar.current.style.transform = `scaleX(${counter.v / 100})`;
       },
-      onComplete: () => {
-        const top = el.querySelector(".pl-top");
-        const bot = el.querySelector(".pl-bot");
-        gsap
-          .timeline({
-            onComplete: () => {
-              setGone(true);
-              lenis?.start();
-            },
-          })
-          .to(q(".pl-fade"), { autoAlpha: 0, duration: 0.5, ease: "power2.in" }, 0)
-          // part into a 2.39:1 letterbox, hold a beat, then open fully
-          .to(top, { yPercent: -82, duration: 1.1, ease: "expo.inOut" }, 0.35)
-          .to(bot, { yPercent: 82, duration: 1.1, ease: "expo.inOut" }, 0.35)
-          .add(() => markReady(), 0.6)
-          .to(top, { yPercent: -100, duration: 1, ease: "expo.inOut" }, 1.85)
-          .to(bot, { yPercent: 100, duration: 1, ease: "expo.inOut" }, 1.85);
-      },
+      onComplete: wipe,
     });
 
     return () => {
-      tl.revert?.();
+      timers.forEach(clearTimeout);
+      rise.revert?.();
+      fill.revert?.();
+      lenis?.start();
     };
   }, []);
 
   if (gone) return null;
 
   return (
-    <div ref={root} className="preloader pointer-events-auto fixed inset-0 z-[80]" aria-hidden>
-      <div className="pl-top absolute inset-x-0 top-0 h-1/2 bg-film" />
-      <div className="pl-bot absolute inset-x-0 bottom-0 h-1/2 bg-film" />
-
-      <div className="pl-fade absolute inset-0 flex flex-col items-center justify-center text-bone">
-        <p className="pl-present absolute text-[13px] tracking-[0.02em] text-smoke">
-          {"SR18 Group presents".split("").map((c, i) => (
-            <span key={i} className="inline-block opacity-0">
-              {c === " " ? " " : c}
-            </span>
-          ))}
+    <div
+      ref={root}
+      className="preloader surface-ink pointer-events-auto fixed inset-0 z-[80] flex items-center"
+      style={{ clipPath: "inset(0 0 0% 0)" }}
+      aria-hidden
+    >
+      <div className="wrap">
+        <p className="t-h2 overflow-hidden pb-[0.12em]">
+          <span ref={name} className="inline-block" style={{ transform: "translateY(105%)" }}>
+            {person.name}
+          </span>
         </p>
-        <p className="pl-name display text-[clamp(44px,7vw,112px)]">
-          {person.name.split("").map((c, i) => (
-            <span key={i} className="inline-block opacity-0">
-              {c === " " ? " " : c}
-            </span>
-          ))}
-        </p>
-        <p className="pl-role mt-5 text-[13px] text-smoke opacity-0">
-          {person.role}, {person.org}
-        </p>
+        <span className="mt-6 block h-px w-full bg-(--line)">
+          <span ref={bar} className="block h-px origin-left bg-mist" style={{ transform: "scaleX(0)" }} />
+        </span>
       </div>
-
-      <div className="pl-fade absolute inset-x-0 bottom-0 flex items-end justify-between px-5 pb-6 text-[12px] text-smoke tabular-nums md:px-10 md:pb-8">
-        <span>A portfolio in chapters</span>
-        <span ref={count}>000</span>
-      </div>
+      <span ref={count} className="t-mono absolute right-(--gutter) bottom-6 text-mist-mute md:bottom-8">
+        000
+      </span>
     </div>
   );
 }

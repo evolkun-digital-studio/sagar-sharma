@@ -56,3 +56,38 @@ export const prefersReducedMotion = () =>
 
 export const isFinePointer = () =>
   typeof window !== "undefined" && window.matchMedia("(pointer: fine)").matches;
+
+export const NO_REDUCE = "(prefers-reduced-motion: no-preference)";
+
+/**
+ * Split an element into masked lines and rise them into view.
+ * Returns a cleanup that kills the tween/trigger and restores the original DOM.
+ * `trigger: false` plays immediately (use `delay` to sequence).
+ */
+export function revealLines(
+  el: HTMLElement,
+  opts: { start?: string; delay?: number; stagger?: number; duration?: number; trigger?: boolean } = {},
+) {
+  const { start = "top 85%", delay = 0, stagger = 0.08, duration = 1.3, trigger = true } = opts;
+  let split: SplitText | null = null;
+  let tween: gsap.core.Tween | null = null;
+  let dead = false;
+  document.fonts.ready.then(() => {
+    if (dead) return;
+    split = SplitText.create(el, { type: "lines", mask: "lines", linesClass: "split-line" });
+    tween = gsap.from(split.lines, {
+      yPercent: 105,
+      duration,
+      stagger,
+      delay,
+      ease: "expo.out",
+      ...(trigger ? { scrollTrigger: { trigger: el, start } } : {}),
+    });
+  });
+  return () => {
+    dead = true;
+    tween?.scrollTrigger?.kill();
+    tween?.kill();
+    split?.revert();
+  };
+}

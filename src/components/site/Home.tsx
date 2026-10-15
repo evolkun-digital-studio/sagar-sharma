@@ -14,7 +14,6 @@ export function Home() {
     <>
       <SmoothScroll />
       <Preloader />
-      <div className="grain" aria-hidden />
       <Nav />
       <main>
         <Hero />

@@ -1,36 +1,37 @@
 import { useRef, type ReactNode } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, SplitText, registerGsap, prefersReducedMotion } from "./core";
+import { gsap, registerGsap, revealLines, NO_REDUCE } from "./core";
 
 registerGsap();
 
-/** Chapter heading and a hairline that draws across. */
+/** Section label: plain text, then a hairline that draws across. */
 export function ChapterMark({ label }: { label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
-      const q = gsap.utils.selector(ref);
-      const tl = gsap.timeline({ scrollTrigger: { trigger: ref.current, start: "top 88%" } });
-      tl.from(q(".cm-rule"), { scaleX: 0, duration: 1.6, ease: "expo.inOut" }, 0).from(
-        q(".cm-t"),
-        { yPercent: 110, duration: 1.1, stagger: 0.08, ease: "expo.out" },
-        0.2,
-      );
+      const mm = gsap.matchMedia();
+      mm.add(NO_REDUCE, () => {
+        const q = gsap.utils.selector(ref);
+        gsap
+          .timeline({ scrollTrigger: { trigger: ref.current, start: "top 88%" } })
+          .from(q(".cm-rule"), { scaleX: 0, duration: 1.4, ease: "expo.inOut" }, 0)
+          .from(q(".cm-t"), { yPercent: 110, duration: 1.1, ease: "expo.out" }, 0.15);
+      });
+      return () => mm.revert();
     },
     { scope: ref },
   );
   return (
-    <div ref={ref} className="flex items-baseline gap-4 text-[12px] text-signal">
-      <h2 className="overflow-hidden">
+    <div ref={ref} className="t-small flex items-center gap-4 text-(--fg-2)">
+      <h2 className="overflow-hidden font-normal">
         <span className="cm-t inline-block">{label}</span>
       </h2>
-      <span className="cm-rule h-px flex-1 origin-left self-center bg-rule" />
+      <span aria-hidden className="cm-rule h-px flex-1 origin-left bg-(--line)" />
     </div>
   );
 }
 
-/** Serif text whose lines rise out of masks when scrolled into view. */
+/** Text whose lines rise out of masks when scrolled into view. */
 export function RevealLines({
   children,
   className = "",
@@ -47,21 +48,9 @@ export function RevealLines({
   const ref = useRef<HTMLElement>(null);
   useGSAP(
     () => {
-      if (prefersReducedMotion()) return;
-      let split: SplitText | null = null;
-      document.fonts.ready.then(() => {
-        if (!ref.current) return;
-        split = SplitText.create(ref.current, { type: "lines", mask: "lines", linesClass: "line-mask" });
-        gsap.from(split.lines, {
-          yPercent: 105,
-          duration: 1.5,
-          stagger: 0.09,
-          delay,
-          ease: "expo.out",
-          scrollTrigger: { trigger: ref.current, start },
-        });
-      });
-      return () => split?.revert();
+      const mm = gsap.matchMedia();
+      mm.add(NO_REDUCE, () => revealLines(ref.current!, { start, delay }));
+      return () => mm.revert();
     },
     { scope: ref },
   );
