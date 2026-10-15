@@ -5,6 +5,7 @@ import plateUrl from "@/assets/sagar-plate.webp";
 import subjectUrl from "@/assets/sagar-subject.webp";
 import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion } from "./core";
 import { focusAreas, person } from "./data";
+import { DubaiClock } from "./Dubai";
 
 registerGsap();
 
@@ -308,16 +309,17 @@ export function Hero() {
       {/* editorial metadata and one clear next action */}
       <div className="hero-caps pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
         <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
-          <div className="border-l-2 border-white pl-4">
+          <div className="border-l-2 border-gold pl-4">
             <p className="text-bone/80">{person.org}</p>
             <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
           </div>
         </div>
 
-        <div className="hero-cap flex items-end justify-between gap-8">
+        <div className="hero-cap flex flex-col items-start justify-between gap-5 md:flex-row md:items-end md:gap-8">
           <p className="max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:max-w-[34ch] md:text-[15px]">
             Building technology ecosystems that help businesses scale with confidence.
           </p>
+          <DubaiClock onDark className="text-[12px] text-bone/80" />
         </div>
       </div>
       <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } }`}</style>

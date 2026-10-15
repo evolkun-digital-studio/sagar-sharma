@@ -9,6 +9,7 @@ import { Journey } from "./Journey";
 import { Principles } from "./Principles";
 import { Practice, Writing } from "./Practice";
 import { Contact } from "./Contact";
+import { StarBand } from "./Dubai";
 
 export function Home() {
   return (
@@ -20,11 +21,13 @@ export function Home() {
         <Hero />
         <Philosophy />
         <Purpose />
+        <StarBand />
         <Group />
         <Journey />
         <Principles />
         <Practice />
         {/* <Writing /> */}
+        <StarBand />
         <Contact />
       </main>
     </>

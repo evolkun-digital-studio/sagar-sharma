@@ -6,6 +6,7 @@ import { gsap, registerGsap, scrollToTarget, NO_REDUCE } from "./core";
 import { ChapterMark, RevealLines } from "./Chapter";
 import { Roll } from "./Roll";
 import { person } from "./data";
+import { DubaiClock, Skyline } from "./Dubai";
 
 registerGsap();
 
@@ -153,7 +154,18 @@ export function Contact() {
         </div>
       </div>
 
-      <footer className="ct-foot mt-32 md:mt-48">
+      <div className="wrap mt-24 md:mt-36">
+        <Skyline />
+        <div className="t-small flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-hair pt-5 text-mute">
+          <DubaiClock />
+          <span lang="ar" dir="rtl" className="text-[15px] text-ink">
+            دبي
+          </span>
+          <span>United Arab Emirates</span>
+        </div>
+      </div>
+
+      <footer className="ct-foot mt-16 md:mt-24">
         <div className="wrap">
           <div className="t-small flex flex-col gap-3 border-t border-hair pt-6 text-mute md:flex-row md:items-center md:justify-between">
             <p>

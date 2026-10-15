@@ -32,6 +32,7 @@
   --color-hair: var(--hair);
   --color-hair-dark: var(--hair-dark);
   --color-signal: var(--signal);
+  --color-gold: var(--gold);
 
   /* legacy aliases so the shadcn ui files keep compiling */
   --color-bone: var(--paper);
@@ -65,6 +66,8 @@
   --hair-dark: rgba(237, 237, 234, 0.12);
   --signal: #c23b33;
   --signal-on-ink: #e5534b;
+  --gold: #b8924a;
+  --gold-on-ink: #d6b26a;
   --white: #ffffff;
   --silver: #e7e9ec;
   --radius: 0px;
@@ -109,6 +112,7 @@
   --fg-3: var(--mist-mute);
   --line: var(--hair-dark);
   --signal: var(--signal-on-ink);
+  --gold: var(--gold-on-ink);
   background-color: var(--ink);
   color: var(--mist);
 }
@@ -281,7 +285,7 @@ html.lenis body {
 
 /* links: a signal underline that draws in from the left */
 .draw-line {
-  background-image: linear-gradient(var(--signal), var(--signal));
+  background-image: linear-gradient(var(--gold), var(--gold));
   background-size: 0% 1px;
   background-repeat: no-repeat;
   background-position: 0 100%;
