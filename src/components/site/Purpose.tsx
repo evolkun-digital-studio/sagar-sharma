@@ -52,7 +52,7 @@ export function Purpose() {
   return (
     <section ref={root} id="purpose" className="surface-paper section-pad relative">
       <div className="wrap">
-        <RevealLines as="h3" className="t-h1 mx-auto max-w-[24ch] text-center text-balance">
+        <RevealLines as="h3" className="t-h1 t-h1-oneline mx-auto max-w-[24ch] text-center text-balance">
           Technology should never exist for its own sake.
         </RevealLines>
 

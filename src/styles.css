@@ -166,6 +166,16 @@ html.lenis body {
   line-height: 0.98;
   letter-spacing: -0.04em;
 }
+/* statement that sits on one line from tablet up, centred */
+.t-h1-oneline {
+  font-size: clamp(1.6rem, 3vw, 4rem);
+}
+@media (min-width: 768px) {
+  .t-h1-oneline {
+    max-width: none;
+    white-space: nowrap;
+  }
+}
 .t-h2 {
   font-size: var(--t-h2);
   font-weight: 500;
