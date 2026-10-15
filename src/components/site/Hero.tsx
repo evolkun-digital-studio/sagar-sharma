@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import * as THREE from "three";
 import plateUrl from "@/assets/sagar-plate.webp";
-import subjectUrl from "@/assets/sagar-subject1.webp";
-import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion, isFinePointer } from "./core";
-import { person } from "./data";
+import subjectUrl from "@/assets/sagar-subject.webp";
+import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion } from "./core";
+import { focusAreas, person } from "./data";
 
 registerGsap();
 
@@ -65,7 +65,7 @@ const frag = /* glsl */ `
       // the room is kept low; a soft key light follows the pointer
       float d = distance(p, uLight) / uRes.y;
       float spot = smoothstep(0.62, 0.0, d);
-      col = base * (0.4 + spot * 0.7);
+      col = base * (0.52 + spot * 0.58);
     }
 
     // lens vignette
@@ -99,7 +99,7 @@ export function Hero() {
     renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     const dpr = Math.min(window.devicePixelRatio, 1.75);
     renderer.setPixelRatio(dpr);
-    renderer.setClearColor(0x0c0c0c, 1);
+    renderer.setClearColor(0x24292e, 1);
     host.appendChild(renderer.domElement);
     renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
 
@@ -129,7 +129,7 @@ export function Hero() {
     const light = { x: 0, y: 0, tx: 0, ty: 0 };
     const rest = () => {
       const r = u.uRect.value as THREE.Vector4;
-      // resting light: a backlight on the wall behind his head
+      // static light: a backlight on the wall behind his head
       light.tx = r.x + r.z * (FACE.x + 0.1);
       light.ty = r.y + r.w * (FACE.y - 0.12);
     };
@@ -153,17 +153,6 @@ export function Hero() {
     const ro = new ResizeObserver(resize);
     ro.observe(host);
 
-    let idle: number | undefined;
-    const onMove = (e: PointerEvent) => {
-      const r = host.getBoundingClientRect();
-      light.tx = e.clientX - r.left;
-      light.ty = e.clientY - r.top;
-      clearTimeout(idle);
-      idle = window.setTimeout(rest, 2600);
-    };
-    if (isFinePointer() && !reduce) window.addEventListener("pointermove", onMove);
-
-
     const t0 = performance.now();
     let raf = 0;
     const loop = () => {
@@ -181,9 +170,7 @@ export function Hero() {
 
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(idle);
       ro.disconnect();
-      window.removeEventListener("pointermove", onMove);
       tex.dispose();
       mat.dispose();
       quad.geometry.dispose();
@@ -233,25 +220,6 @@ export function Hero() {
           0,
         );
 
-      // depth: layers drift at different rates under the pointer
-      if (isFinePointer()) {
-        const sx = gsap.quickTo(q(".hero-subject"), "x", { duration: 1.6, ease: "power3" });
-        const sy = gsap.quickTo(q(".hero-subject"), "y", { duration: 1.6, ease: "power3" });
-        const nx = gsap.quickTo(q(".hero-name-inner"), "x", { duration: 1.8, ease: "power3" });
-        const move = (e: PointerEvent) => {
-          const x = e.clientX / window.innerWidth - 0.5;
-          const y = e.clientY / window.innerHeight - 0.5;
-          sx(x * 14);
-          sy(y * 8);
-          nx(x * -22);
-        };
-        window.addEventListener("pointermove", move);
-        return () => {
-          off();
-          window.removeEventListener("pointermove", move);
-          split?.revert();
-        };
-      }
       return () => {
         off();
         split?.revert();
@@ -264,12 +232,13 @@ export function Hero() {
     <section ref={root} id="top" className="relative h-[100svh] min-h-[600px] overflow-hidden bg-film text-bone">
       <div ref={stage} className="hero-stage absolute inset-0 will-change-transform">
         <div ref={glHost} aria-hidden className="absolute inset-0" />
-        {/* keeps the name legible against the window light */}
-        <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-[5] w-full bg-gradient-to-r from-film/70 via-film/25 to-transparent md:w-[62%]" />
-
         {/* the name lives in the room — between the wall and the man */}
-        <div className="hero-name-wrap absolute inset-0 z-30 md:z-10">
-          <div className="hero-name-inner absolute bottom-[23svh] left-5 md:top-[24svh] md:bottom-auto md:left-[5vw]">
+        <div className="hero-name-wrap absolute inset-0 z-30">
+          <div className="hero-name-inner absolute bottom-[24svh] left-5 md:top-[30svh] md:bottom-auto md:left-[5vw]">
+            <p className="hero-cap mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-signal">
+              <span className="h-px w-8 bg-signal" />
+              {person.role}
+            </p>
             <h1 className="hero-name display text-[clamp(54px,16vw,96px)] text-bone md:text-[min(7.2vw,12svh)]">
               <span className="block">{person.first}</span>
               <span className="block pl-[0.5em] md:pl-[0.74em]">{person.last}</span>
@@ -277,7 +246,7 @@ export function Hero() {
           </div>
         </div>
 
-        <img
+        {/* <img
           ref={subject}
           src={subjectUrl}
           alt="Sagar Sharma, Chief Technology Officer of SR18 Group"
@@ -290,24 +259,29 @@ export function Hero() {
             top: 0,
             filter: `${SUBJECT_FILTER} brightness(1)`,
           }}
-        />
-        {/* floor shadow so the subject sits in the frame */}
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[38%] bg-gradient-to-t from-film via-film/70 to-transparent" />
+        /> */}
       </div>
 
-      {/* captions */}
-      <div className="pointer-events-none absolute inset-0 z-40">
-        <p className="hero-cap absolute bottom-[12svh] left-5 max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:bottom-[18svh] md:left-[5vw] md:max-w-[34ch] md:text-[15px]">
-          Building technology ecosystems that help businesses scale with confidence.
-        </p>
-        <div className="hero-cap absolute inset-x-5 bottom-6 flex items-end justify-between text-[12px] text-smoke md:inset-x-[5vw] md:bottom-8">
-          <span>A portfolio in chapters</span>
-          <span className="flex items-center gap-3">
-            Scroll
-            <span className="relative block h-10 w-px overflow-hidden bg-bone/15">
-              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_cubic-bezier(.7,0,.2,1)_infinite] bg-bone/80" />
+      {/* editorial metadata and one clear next action */}
+      <div className="pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
+        <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
+          <div className="border-l-2 border-signal pl-4">
+            <p className="text-bone/80">{person.org}</p>
+            <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
+          </div>
+          <p className="hidden text-right text-bone/45 md:block">Independent technology portfolio</p>
+        </div>
+
+        <div className="hero-cap flex items-end justify-between gap-8">
+          <p className="max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:max-w-[34ch] md:text-[15px]">
+            Building technology ecosystems that help businesses scale with confidence.
+          </p>
+          <div className="flex items-end gap-4 text-[11px] uppercase tracking-[0.14em] text-bone/60">
+            <span>Scroll to explore</span>
+            <span className="relative block h-10 w-px overflow-hidden bg-bone/20">
+              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_cubic-bezier(.7,0,.2,1)_infinite] bg-signal" />
             </span>
-          </span>
+          </div>
         </div>
       </div>
       <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } }`}</style>
