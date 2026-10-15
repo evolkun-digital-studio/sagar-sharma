@@ -145,7 +145,8 @@ export const industries = [
   },
 ];
 
-export const writing = [
+/** Add an `href` once an essay is published; rows without one render as "Coming soon". */
+export const writing: { title: string; tag: string; href?: string }[] = [
   { title: "Why enterprise architecture determines business success", tag: "Strategy" },
   { title: "The future of AI in business", tag: "Artificial Intelligence" },
   { title: "Technology leadership beyond code", tag: "Leadership" },
