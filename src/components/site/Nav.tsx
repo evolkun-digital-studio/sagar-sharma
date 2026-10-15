@@ -73,7 +73,7 @@ export function Nav() {
           <a href="#top" inert={open} className="roll-host justify-self-start font-medium">
             <Roll>{person.name}</Roll>
           </a>
-          <span className={`hidden lg:block ${open ? "text-graphite" : "text-mist-mute"}`}>
+          <span className={`hidden lg:block ${open ? "text-graphite" : "text-mist"}`}>
             {person.role}, {person.org}
           </span>
           <button
