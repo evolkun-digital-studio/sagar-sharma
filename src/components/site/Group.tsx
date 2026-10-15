@@ -126,10 +126,10 @@ export function Group() {
       <div className="wrap"> 
 
         <div className="grid-12 mt-14 gap-y-10 md:mt-20">
-          <RevealLines as="h3" className="t-h1 col-span-12 max-w-[22ch] md:col-span-8">
+          <RevealLines as="h3" className="t-h1 col-span-12 max-w-[22ch] md:col-span-12 lg:col-span-8">
             One architecture across five industries.
           </RevealLines>
-          <p className="col-span-12 max-w-[38ch] self-end text-[15px] leading-[1.7] text-graphite md:col-span-3 md:col-start-10">
+          <p className="col-span-12 max-w-[38ch] self-end text-[15px] leading-[1.7] text-graphite md:col-span-8 lg:col-span-4 lg:col-start-9 xl:col-span-3 xl:col-start-10">
             As Chief Technology Officer of SR18 Group, I lead technology strategy for every business
             in the group: enterprise architecture, cybersecurity, AI and digital transformation,
             held to one standard.

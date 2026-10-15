@@ -186,7 +186,7 @@ export function Principles() {
                 <p className="pr-num mb-6 font-mono text-[13px] tabular-nums text-[#9a9fa7] md:mb-8">
                   {pad(i + 1)} / {pad(n)}
                 </p>
-                <p className="pr-text max-w-[20ch] text-[38px] leading-[1.08] font-semibold tracking-[-0.025em] md:text-[64px] text-balance">
+                <p className="pr-text max-w-[20ch] text-[38px] leading-[1.08] font-semibold tracking-[-0.025em] md:text-[48px] xl:text-[64px] text-balance">
                   {p}
                 </p>
               </div>
