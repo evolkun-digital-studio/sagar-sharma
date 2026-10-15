@@ -76,7 +76,7 @@ export function revealLines(
     if (dead) return;
     split = SplitText.create(el, { type: "lines", mask: "lines", linesClass: "split-line" });
     tween = gsap.from(split.lines, {
-      yPercent: 105,
+      yPercent: 125,
       duration,
       stagger,
       delay,

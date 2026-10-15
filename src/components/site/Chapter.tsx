@@ -15,7 +15,7 @@ export function ChapterMark({ label }: { label: string }) {
         gsap
           .timeline({ scrollTrigger: { trigger: ref.current, start: "top 88%" } })
           .from(q(".cm-rule"), { scaleX: 0, duration: 1.4, ease: "expo.inOut" }, 0)
-          .from(q(".cm-t"), { yPercent: 110, duration: 1.1, ease: "expo.out" }, 0.15);
+          .from(q(".cm-t"), { yPercent: 125, duration: 1.1, ease: "expo.out" }, 0.15);
       });
       return () => mm.revert();
     },

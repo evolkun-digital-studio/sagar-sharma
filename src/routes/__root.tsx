@@ -13,6 +13,17 @@ import appCss from "../styles.css?url";
 import geistUrl from "../assets/fonts/geist-latin-wght-normal.woff2?url";
 import geistMonoUrl from "../assets/fonts/geist-mono-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { person } from "../components/site/data";
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: person.name,
+  jobTitle: person.role,
+  worksFor: { "@type": "Organization", name: person.org },
+  alumniOf: "Delhi Technological University",
+  sameAs: [person.linkedin],
+};
 
 function NotFoundComponent() {
   return (
@@ -80,15 +91,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#0c0c0c" },
-      { title: "Sagar Sharma — Chief Technology Officer, SR18 Group" },
+      { name: "theme-color", content: "#0E0F11" },
+      { title: "Sagar Sharma, Chief Technology Officer, SR18 Group" },
       {
         name: "description",
         content:
           "Sagar Sharma is Chief Technology Officer of SR18 Group, building technology ecosystems across enterprise architecture, AI, cloud and cybersecurity.",
       },
       { name: "author", content: "Sagar Sharma" },
-      { property: "og:title", content: "Sagar Sharma — Chief Technology Officer" },
+      { property: "og:title", content: "Sagar Sharma, Chief Technology Officer, SR18 Group" },
       {
         property: "og:description",
         content:
@@ -97,6 +108,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "profile" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(personSchema) }],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preload", href: geistUrl, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
