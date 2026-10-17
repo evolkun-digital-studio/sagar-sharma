@@ -1,37 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap, NO_REDUCE } from "./core";
 
 registerGsap();
-
-/** "Dubai, UAE" with the live local time (Gulf Standard Time, UTC+4). */
-export function DubaiClock({ className = "", onDark = false }: { className?: string; onDark?: boolean }) {
-  const [time, setTime] = useState("");
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Asia/Dubai",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    });
-    const tick = () => setTime(fmt.format(new Date()));
-    tick();
-    const id = window.setInterval(tick, 15000);
-    return () => window.clearInterval(id);
-  }, []);
-  return (
-    <span
-      className={`inline-flex items-center gap-3 ${className}`}
-      style={onDark ? ({ "--gold": "var(--gold-on-ink)" } as React.CSSProperties) : undefined}
-    >
-      <span aria-hidden className="block size-1.5 rotate-45 bg-gold" />
-      <span>Dubai, UAE</span>
-      <span className="t-mono opacity-70" aria-label={time ? `${time} Gulf Standard Time` : undefined}>
-        {time || "--:--"} GST
-      </span>
-    </span>
-  );
-}
 
 /**
  * A strip of eight-pointed stars (two overlapped squares), the geometry behind

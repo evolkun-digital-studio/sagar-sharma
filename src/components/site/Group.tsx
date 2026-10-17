@@ -3,6 +3,10 @@ import { useGSAP } from "@gsap/react";
 import { gsap, registerGsap, NO_REDUCE, isFinePointer } from "./core";
 import { ChapterMark, RevealLines } from "./Chapter";
 import { focusAreas, industries } from "./data";
+import technologyUrl from "@/assets/techonology.jpg";
+import gamingUrl from "@/assets/gaming.avif";
+import beveragesUrl from "@/assets/beverages.png";
+import realestateUrl from "@/assets/realestate.avif";
 
 registerGsap();
 
@@ -11,35 +15,40 @@ registerGsap();
  * For production, download each photo (~1600px wide), save to src/assets/group/ and swap
  * the `src` strings for imports so the site doesn't depend on a third-party CDN.
  *   Technology  · Server racks in a data center — imgix          unsplash.com/photos/klWUhr-wPJ8
- *   Gaming      · LAN arena, 1337Camp — Ella Don                  unsplash.com/photos/GVbd5btrqeA
- *   Real Estate · Geometric facade, Tirana — Aldo Vukaj           unsplash.com/photos/w-nBFVS928I
+ *   Gaming      · local asset: src/assets/gaming.avif
+ *   Real Estate · local asset: src/assets/realestate.avif
  *   Textile     · Stacked fabric rolls — Bernd Dittrich           unsplash.com/photos/rEb9iHOF638
- *   Beverages   · Bottles on a conveyor — Seyed A. M. Tabatabaee  unsplash.com/photos/LEbJ9opJeik
+ *   Beverages   · local asset: src/assets/beverages.png
  */
 const UNSPLASH = (id: string, w: number) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=72`;
 
-const PHOTOS: Record<string, { id: string; alt: string; focus?: string }> = {
+const PHOTOS: Record<string, { id?: string; local?: string; alt: string; focus?: string }> = {
   Technology: {
-    id: "photo-1506399558188-acca6f8cbf41",
+    local: technologyUrl,
     alt: "Rows of server racks in a data center",
   },
   Gaming: {
-    id: "photo-1633545495735-25df17fb9f31",
-    alt: "A gaming arena with rows of desks and chairs",
+    local: gamingUrl,
+    alt: "An online gaming platform with casino and sports lobbies",
   },
   "Real Estate": {
-    id: "photo-1774276982082-629a21fc321e",
+    local: realestateUrl,
     alt: "A modern building with a geometric facade",
   },
   Textile: { id: "photo-1771098206650-81d713e2e2b9", alt: "Stacked rolls of fabric" },
   Beverages: {
-    id: "photo-1780145180040-0beda1df60e6",
-    alt: "Bottles moving along a factory conveyor belt",
+    local: beveragesUrl,
+    alt: "Cans of Masai Super Strong beer held in arms",
   },
 };
 
 const srcSet = (id: string) => [640, 1080, 1600].map((w) => `${UNSPLASH(id, w)} ${w}w`).join(", ");
+
+type Photo = (typeof PHOTOS)[string];
+/** fallback URLs stand in for the deleted local assets until they are supplied again */
+const imgSrc = (p: Photo, w: number) => p.local ?? UNSPLASH(p.id!, w);
+const imgSrcSet = (p: Photo) => (p.local ? undefined : srcSet(p.id!));
 
 const EASE = "ease-[cubic-bezier(0.16,1,0.3,1)]";
 const SIGNAL = { background: "var(--signal, #E5534B)" };
@@ -159,8 +168,8 @@ export function Group() {
                   {photo && (
                     <div className="gp-drift absolute -inset-4">
                       <img
-                        src={UNSPLASH(photo.id, 1080)}
-                        srcSet={srcSet(photo.id)}
+                        src={imgSrc(photo, 1080)}
+                        srcSet={imgSrcSet(photo)}
                         sizes="(min-width: 1280px) 60vw, 100vw"
                         alt={photo.alt}
                         loading="lazy"
@@ -246,8 +255,8 @@ export function Group() {
                 >
                   {photo && (
                     <img
-                      src={UNSPLASH(photo.id, 800)}
-                      srcSet={srcSet(photo.id)}
+                      src={imgSrc(photo, 800)}
+                      srcSet={imgSrcSet(photo)}
                       sizes="(min-width: 640px) 44vw, 78vw"
                       alt={photo.alt}
                       loading="lazy"

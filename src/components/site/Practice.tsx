@@ -30,7 +30,7 @@ export function Practice() {
   return (
     <section ref={root} id="practice" className="surface-silver relative pt-(--section-pad) pb-[calc(var(--section-pad)*0.7)]">
       <div className="wrap"> 
-        <RevealLines as="h3" className="t-h1 mt-14 max-w-[20ch] md:mt-20">
+        <RevealLines as="h3" className="t-h1 t-h1-oneline mt-14 max-w-none whitespace-nowrap md:mt-20">
           Eight disciplines that compound.
         </RevealLines>
 

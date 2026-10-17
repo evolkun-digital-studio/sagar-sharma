@@ -366,7 +366,9 @@ html.lenis body {
   padding: clamp(5rem, 11vh, 8.5rem) 0 clamp(3rem, 7vh, 5.5rem);
 }
 
-.jr-year-wrap { align-self: end; }
+.jr-year-wrap {
+  align-self: end;
+}
 .jr-period {
   color: var(--jr-muted);
   font-size: 0.66rem;
@@ -384,12 +386,27 @@ html.lenis body {
   letter-spacing: -0.04em;
   line-height: 0.84;
 }
-.jr-year-reel { will-change: transform; }
-.jr-year-cell { display: block; height: 0.84em; white-space: nowrap; }
+.jr-year-reel {
+  will-change: transform;
+}
+.jr-year-cell {
+  display: block;
+  height: 0.84em;
+  white-space: nowrap;
+}
 
-.jr-content { position: relative; min-height: clamp(21rem, 42vh, 27rem); }
-.jr-panel { position: absolute; inset: auto 0 0; will-change: transform, opacity; }
-.jr-period { margin-bottom: clamp(1.2rem, 2.2vw, 1.8rem); }
+.jr-content {
+  position: relative;
+  min-height: clamp(21rem, 42vh, 27rem);
+}
+.jr-panel {
+  position: absolute;
+  inset: auto 0 0;
+  will-change: transform, opacity;
+}
+.jr-period {
+  margin-bottom: clamp(1.2rem, 2.2vw, 1.8rem);
+}
 .jr-kicker {
   max-width: 15ch;
   color: var(--jr-ink);
@@ -400,8 +417,29 @@ html.lenis body {
   line-height: 1.1;
   text-wrap: balance;
 }
-.jr-heading-word { display: inline-block; overflow: hidden; margin-bottom: -0.16em; padding-bottom: 0.16em; vertical-align: top; }
-.jr-heading-word > span { display: inline-block; will-change: transform; }
+.jr-kicker.jr-kicker--two-lines {
+  max-width: none;
+  white-space: nowrap;
+}
+.jr-kicker.jr-kicker--single-line {
+  max-width: none;
+  white-space: nowrap;
+}
+.jr-kicker--two-lines .jr-heading-word:first-child {
+  display: block;
+  width: max-content;
+}
+.jr-heading-word {
+  display: inline-block;
+  overflow: hidden;
+  margin-bottom: -0.16em;
+  padding-bottom: 0.16em;
+  vertical-align: top;
+}
+.jr-heading-word > span {
+  display: inline-block;
+  will-change: transform;
+}
 .jr-position {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -414,7 +452,9 @@ html.lenis body {
   font-size: clamp(0.78rem, 1vw, 0.9rem);
   line-height: 1.45;
 }
-.jr-position p:last-child { color: var(--jr-muted); }
+.jr-position p:last-child {
+  color: var(--jr-muted);
+}
 .jr-description {
   max-width: 57ch;
   margin-top: clamp(1.4rem, 2.5vw, 2.25rem);
@@ -424,9 +464,19 @@ html.lenis body {
   text-wrap: pretty;
 }
 
-.jr-timeline-shell { position: relative; padding-right: 7.5rem; }
-.jr-track-viewport { overflow: hidden; cursor: grab; touch-action: pan-y; user-select: none; }
-.jr-track-viewport.is-dragging { cursor: grabbing; }
+.jr-timeline-shell {
+  position: relative;
+  padding-right: 7.5rem;
+}
+.jr-track-viewport {
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+}
+.jr-track-viewport.is-dragging {
+  cursor: grabbing;
+}
 .jr-track {
   position: relative;
   width: 100%;
@@ -434,11 +484,33 @@ html.lenis body {
   padding: 0 0.75rem;
   will-change: transform;
 }
-.jr-track-line { position: absolute; top: 1.45rem; right: 0.75rem; left: 0.75rem; height: 1px; background: var(--jr-rule); }
-.jr-markers { position: relative; display: grid; grid-template-columns: repeat(5, 1fr); height: 100%; }
-.jr-marker { position: relative; min-width: 2.75rem; height: 5.5rem; color: var(--jr-muted); cursor: pointer; }
-.jr-marker:first-child { justify-self: start; }
-.jr-marker:last-child { justify-self: end; }
+.jr-track-line {
+  position: absolute;
+  top: 1.45rem;
+  right: 0.75rem;
+  left: 0.75rem;
+  height: 1px;
+  background: var(--jr-rule);
+}
+.jr-markers {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  height: 100%;
+}
+.jr-marker {
+  position: relative;
+  min-width: 2.75rem;
+  height: 5.5rem;
+  color: var(--jr-muted);
+  cursor: pointer;
+}
+.jr-marker:first-child {
+  justify-self: start;
+}
+.jr-marker:last-child {
+  justify-self: end;
+}
 .jr-marker-dot {
   position: absolute;
   top: 1.45rem;
@@ -449,7 +521,11 @@ html.lenis body {
   border-radius: 50%;
   background: var(--silver);
   transform: translate(-50%, -50%);
-  transition: width 350ms var(--ease-expo), height 350ms var(--ease-expo), background-color 350ms ease, border-color 350ms ease;
+  transition:
+    width 350ms var(--ease-expo),
+    height 350ms var(--ease-expo),
+    background-color 350ms ease,
+    border-color 350ms ease;
 }
 .jr-marker-label {
   position: absolute;
@@ -462,7 +538,11 @@ html.lenis body {
   transform: translateX(-50%);
   transition: color 350ms ease;
 }
-.jr-marker:hover, .jr-marker:focus-visible, .jr-marker.is-active { color: var(--jr-active); }
+.jr-marker:hover,
+.jr-marker:focus-visible,
+.jr-marker.is-active {
+  color: var(--jr-active);
+}
 .jr-marker.is-active .jr-marker-dot {
   width: 1rem;
   height: 1rem;
@@ -471,7 +551,13 @@ html.lenis body {
   box-shadow: 0 0 0 0.32rem var(--jr-accent);
 }
 
-.jr-controls { position: absolute; top: -0.42rem; right: 0; display: flex; gap: 0.55rem; }
+.jr-controls {
+  position: absolute;
+  top: -0.42rem;
+  right: 0;
+  display: flex;
+  gap: 0.55rem;
+}
 .jr-controls button {
   display: grid;
   width: 2.9rem;
@@ -480,38 +566,103 @@ html.lenis body {
   border: 1px solid var(--jr-active);
   border-radius: 50%;
   color: var(--jr-active);
-  transition: color 250ms ease, background-color 250ms ease, opacity 250ms ease;
+  transition:
+    color 250ms ease,
+    background-color 250ms ease,
+    opacity 250ms ease;
 }
-.jr-controls button:not(:disabled):hover { background: var(--jr-active); color: var(--silver); }
-.jr-controls button:active:not(:disabled) { transform: translateY(1px); }
-.jr-controls button:disabled { border-color: var(--jr-rule); color: var(--jr-rule); cursor: not-allowed; opacity: 0.7; }
-.jr-controls svg { width: 1.05rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.35; }
+.jr-controls button:not(:disabled):hover {
+  background: var(--jr-active);
+  color: var(--silver);
+}
+.jr-controls button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.jr-controls button:disabled {
+  border-color: var(--jr-rule);
+  color: var(--jr-rule);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.jr-controls svg {
+  width: 1.05rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+}
 /* tablet: keep the two-column stage inside the viewport */
 @media (min-width: 768px) and (max-width: 1099px) {
   .jr-stage {
     grid-template-columns: minmax(9rem, 0.7fr) minmax(0, 1.3fr);
     gap: clamp(1.5rem, 4vw, 3rem);
   }
-  .jr-content { min-width: 0; }
-  .jr-year { font-size: clamp(3rem, 8vw, 5rem); }
-  .jr-position { grid-template-columns: 1fr; gap: 0.2rem; }
-  .jr-timeline-shell { padding-right: 6.5rem; }
+  .jr-content {
+    min-width: 0;
+  }
+  .jr-year {
+    font-size: clamp(3rem, 8vw, 5rem);
+  }
+  .jr-position {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  .jr-timeline-shell {
+    padding-right: 6.5rem;
+  }
 }
 @media (max-width: 767px) {
-  .journey-explorer { min-height: 55rem; padding-top: 5.5rem; padding-bottom: 2.25rem; }
-  .jr-stage { display: block; min-height: 37rem; padding: 4.75rem 0 2.75rem; }
-  .jr-year { font-size: clamp(3.5rem, 18vw, 5rem); }
-  .jr-content { min-height: 23.5rem; margin-top: 3.75rem; }
-  .jr-panel { inset: 0 0 auto; }
-  .jr-kicker { max-width: 12ch; font-size: clamp(1.75rem, 8vw, 2.4rem); }
-  .jr-position { grid-template-columns: 1fr; gap: 0.2rem; }
-  .jr-timeline-shell { padding-right: 0; }
-  .jr-track { width: 45rem; }
-  .jr-controls { top: auto; right: 0; bottom: -3.4rem; }
+  .journey-explorer {
+    min-height: 55rem;
+    padding-top: 5.5rem;
+    padding-bottom: 2.25rem;
+  }
+  .jr-stage {
+    display: block;
+    min-height: 37rem;
+    padding: 4.75rem 0 2.75rem;
+  }
+  .jr-year {
+    font-size: clamp(3.5rem, 18vw, 5rem);
+  }
+  .jr-content {
+    min-height: 23.5rem;
+    margin-top: 3.75rem;
+  }
+  .jr-panel {
+    inset: 0 0 auto;
+  }
+  .jr-kicker {
+    max-width: 12ch;
+    font-size: clamp(1.75rem, 8vw, 2.4rem);
+  }
+  .jr-position {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  .jr-timeline-shell {
+    padding-right: 0;
+  }
+  .jr-track {
+    width: 45rem;
+  }
+  /* phones swipe between years; no arrow buttons */
+  .jr-controls {
+    display: none;
+  }
+  .journey-explorer {
+    touch-action: pan-y;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jr-year-reel, .jr-track, .jr-panel, .jr-heading-word > span { will-change: auto; }
+  .jr-year-reel,
+  .jr-track,
+  .jr-panel,
+  .jr-heading-word > span {
+    will-change: auto;
+  }
 }
 
 /* grain sits over everything */
@@ -527,6 +678,117 @@ html.lenis body {
 }
 .dim-item {
   transition: opacity 0.6s var(--ease-expo);
+}
+
+/* Flagship projects: source-faithful ThreeUI scene in the portfolio grid */
+.flagship-threeui-frame {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #171a24;
+}
+
+.flagship-threeui-frame > .threeui-background,
+.flagship-threeui-frame .landing-page-frame {
+  width: 100%;
+  height: 100%;
+}
+
+.fp-scene-state {
+  display: grid;
+  height: 100%;
+  padding: clamp(24px, 4vw, 56px);
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  color: var(--mist);
+  text-align: center;
+}
+
+.fp-scene-state p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fp-scene-state span:not(.fp-loading-line) {
+  color: var(--mist-mute);
+  font-size: 13px;
+}
+
+.fp-loading-line {
+  position: relative;
+  display: block;
+  width: min(240px, 60vw);
+  height: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+  background: var(--hair-dark);
+}
+
+.fp-loading-line::after {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 36%;
+  background: #c87046;
+  content: "";
+  animation: fp-loading 1.4s var(--ease-expo) infinite;
+}
+
+.fp-mobile-row {
+  display: grid;
+  gap: 28px;
+}
+
+.fp-mobile-meta {
+  min-width: 0;
+}
+
+@keyframes fp-loading {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(280%);
+  }
+}
+
+@media (min-width: 768px) {
+  .fp-mobile-meta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .fp-mobile-row {
+    grid-template-columns: minmax(240px, 0.9fr) minmax(0, 2.1fr);
+    gap: clamp(48px, 6vw, 96px);
+    padding-top: 44px;
+    padding-bottom: 44px;
+  }
+
+  .fp-mobile-meta {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .flagship-threeui-frame {
+    height: 100svh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fp-loading-line::after {
+    width: 100%;
+    animation: none;
+  }
 }
 
 /* shifting text sits on an inner span: GSAP never animates an element with a CSS transition */
@@ -545,12 +807,20 @@ html.lenis body {
   animation: preloader-failsafe 0s linear 8s forwards;
 }
 @keyframes preloader-failsafe {
-  to { visibility: hidden; opacity: 0; pointer-events: none; }
+  to {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .preloader { display: none; }
-  *, *::before, *::after {
+  .preloader {
+    display: none;
+  }
+  *,
+  *::before,
+  *::after {
     transition-duration: 0.01ms !important;
   }
 }

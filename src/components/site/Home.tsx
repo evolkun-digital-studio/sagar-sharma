@@ -7,6 +7,7 @@ import { Purpose } from "./Purpose";
 import { Group } from "./Group";
 import { Journey } from "./Journey";
 import { Principles } from "./Principles";
+import { FlagshipProjects } from "./FlagshipProjects";
 import { Practice, Writing } from "./Practice";
 import { Contact } from "./Contact";
 import { StarBand } from "./Dubai";
@@ -25,7 +26,8 @@ export function Home() {
         <Group />
         <Journey />
         <Principles />
-        <Practice />
+        <Practice />  
+        <FlagshipProjects />  
         {/* <Writing /> */}
         <StarBand />
         <Contact />

@@ -5,7 +5,6 @@ import plateUrl from "@/assets/sagar-plate.webp";
 import subjectUrl from "@/assets/sagar-subject.webp";
 import { gsap, SplitText, registerGsap, onReady, prefersReducedMotion } from "./core";
 import { focusAreas, person } from "./data";
-import { DubaiClock } from "./Dubai";
 
 registerGsap();
 
@@ -277,7 +276,11 @@ export function Hero() {
         <div ref={glHost} aria-hidden className="absolute inset-0" />
         {/* the name lives in the room — between the wall and the man */}
         <div className="hero-name-wrap absolute inset-0 z-30">
-          <div className="hero-name-inner absolute bottom-[24svh] left-5 md:top-[30svh] md:bottom-auto md:left-[5vw]">
+          <div className="hero-name-inner absolute bottom-[17svh] left-5 md:top-[30svh] md:bottom-auto md:left-[5vw]">
+            <div className="hero-cap mb-6 border-l-2 border-white pl-4 text-[11px] uppercase tracking-[0.14em]">
+              <p className="text-bone/80">{person.org}</p>
+              <p className="mt-2 hidden max-w-[32ch] text-bone/45 md:block">{focusAreas.slice(0, 3).join(" · ")}</p>
+            </div>
             <p className="hero-cap mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-bone/80 md:text-[12px]">
               {person.role}
             </p>
@@ -307,19 +310,11 @@ export function Hero() {
       </div>
 
       {/* editorial metadata and one clear next action */}
-      <div className="hero-caps pointer-events-none absolute inset-0 z-40 flex flex-col justify-between px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
-        <div className="hero-cap flex items-start justify-between gap-8 text-[11px] uppercase tracking-[0.14em]">
-          <div className="border-l-2 border-gold pl-4">
-            <p className="text-bone/80">{person.org}</p>
-            <p className="mt-2 max-w-[32ch] text-bone/45">{focusAreas.slice(0, 3).join(" · ")}</p>
-          </div>
-        </div>
-
-        <div className="hero-cap flex flex-col items-start justify-between gap-5 md:flex-row md:items-end md:gap-8">
+      <div className="hero-caps pointer-events-none absolute inset-0 z-40 flex flex-col justify-end px-5 pt-28 pb-6 md:px-[5vw] md:pt-32 md:pb-8">
+        <div className="hero-cap hidden md:flex flex-col items-start justify-between gap-5 md:flex-row md:items-end md:gap-8">
           <p className="max-w-[30ch] text-[14px] leading-[1.55] text-bone/80 md:max-w-[34ch] md:text-[15px]">
             Building technology ecosystems that help businesses scale with confidence.
           </p>
-          <DubaiClock onDark className="text-[12px] text-bone/80" />
         </div>
       </div>
       <style>{`@keyframes scrollcue { from { transform: translateY(-100%) } to { transform: translateY(200%) } }`}</style>

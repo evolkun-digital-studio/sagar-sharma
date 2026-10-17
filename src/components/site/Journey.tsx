@@ -10,6 +10,14 @@ const YEAR_LABELS = journey.map(({ years }) => {
   return year ?? years.toUpperCase();
 });
 
+const TWO_LINE_KICKERS = new Set([
+  "Engineering enterprise systems",
+  "Leading engineering organizations",
+  "Architecting business ecosystems",
+]);
+
+const SINGLE_LINE_KICKERS = new Set(["Building tomorrow"]);
+
 function Arrow({ direction }: { direction: "previous" | "next" }) {
   const next = direction === "next";
   return (
@@ -62,6 +70,7 @@ export function Journey() {
       let dragLast = 0;
       let dragLastTime = 0;
       let dragVelocity = 0;
+      let dragMoved = false;
 
       const targetX = (index: number) => {
         const overflow = Math.max(0, trackElement.scrollWidth - viewport.clientWidth);
@@ -156,9 +165,14 @@ export function Journey() {
       resizeObserver.observe(trackElement);
 
       const onPointerDown = (event: PointerEvent) => {
-        if (event.pointerType === "mouse" && event.button !== 0) return;
-        if ((event.target as HTMLElement).closest("button")) return;
+        const target = event.target as HTMLElement;
+        if (event.pointerType === "mouse") {
+          // mouse: drag the timeline only, and let marker buttons stay clickable
+          if (event.button !== 0 || !viewport.contains(target) || target.closest("button")) return;
+        }
+        // touch / pen: swipe anywhere in the section
         dragging = true;
+        dragMoved = false;
         dragStart = event.clientX;
         dragLast = event.clientX;
         dragLastTime = performance.now();
@@ -166,7 +180,7 @@ export function Journey() {
         transition?.kill();
         gsap.killTweensOf(trackElement);
         viewport.classList.add("is-dragging");
-        viewport.setPointerCapture(event.pointerId);
+        section.setPointerCapture(event.pointerId);
       };
 
       const onPointerMove = (event: PointerEvent) => {
@@ -177,6 +191,7 @@ export function Journey() {
         dragLast = event.clientX;
         dragLastTime = now;
         const delta = event.clientX - dragStart;
+        if (Math.abs(delta) > 8) dragMoved = true;
         const minimum = targetX(journey.length - 1) - 54;
         const maximum = 54;
         gsap.set(trackElement, { x: gsap.utils.clamp(minimum, maximum, targetX(current) + delta) });
@@ -186,8 +201,8 @@ export function Journey() {
         if (!dragging) return;
         dragging = false;
         viewport.classList.remove("is-dragging");
-        if (viewport.hasPointerCapture(event.pointerId))
-          viewport.releasePointerCapture(event.pointerId);
+        if (section.hasPointerCapture(event.pointerId))
+          section.releasePointerCapture(event.pointerId);
         const distance = event.clientX - dragStart;
         const shouldMove = Math.abs(distance) > 48 || Math.abs(dragVelocity) > 0.45;
         if (shouldMove) goTo(current + (distance < 0 ? 1 : -1));
@@ -215,20 +230,30 @@ export function Journey() {
         }
       };
 
-      viewport.addEventListener("pointerdown", onPointerDown);
-      viewport.addEventListener("pointermove", onPointerMove);
-      viewport.addEventListener("pointerup", finishDrag);
-      viewport.addEventListener("pointercancel", finishDrag);
+      // a swipe that began on a marker must not also count as a tap on it
+      const onClickCapture = (event: MouseEvent) => {
+        if (!dragMoved) return;
+        event.stopPropagation();
+        event.preventDefault();
+        dragMoved = false;
+      };
+
+      section.addEventListener("pointerdown", onPointerDown);
+      section.addEventListener("pointermove", onPointerMove);
+      section.addEventListener("pointerup", finishDrag);
+      section.addEventListener("pointercancel", finishDrag);
+      section.addEventListener("click", onClickCapture, true);
       viewport.addEventListener("wheel", onWheel, { passive: false });
 
       return () => {
         transition?.kill();
         clearTimeout(wheelReset);
         resizeObserver.disconnect();
-        viewport.removeEventListener("pointerdown", onPointerDown);
-        viewport.removeEventListener("pointermove", onPointerMove);
-        viewport.removeEventListener("pointerup", finishDrag);
-        viewport.removeEventListener("pointercancel", finishDrag);
+        section.removeEventListener("pointerdown", onPointerDown);
+        section.removeEventListener("pointermove", onPointerMove);
+        section.removeEventListener("pointerup", finishDrag);
+        section.removeEventListener("pointercancel", finishDrag);
+        section.removeEventListener("click", onClickCapture, true);
         viewport.removeEventListener("wheel", onWheel);
         navigate.current = () => undefined;
       };
@@ -251,7 +276,13 @@ export function Journey() {
               key={milestone.kicker}
             >
               <p className="jr-supporting jr-period">{milestone.yearsLong}</p>
-              <h3 className="jr-kicker">
+              <h3
+                className={`jr-kicker${
+                  TWO_LINE_KICKERS.has(milestone.kicker) ? " jr-kicker--two-lines" : ""
+                }${
+                  SINGLE_LINE_KICKERS.has(milestone.kicker) ? " jr-kicker--single-line" : ""
+                }`}
+              >
                 {milestone.kicker.split(" ").map((word, wordIndex) => (
                   <span className="jr-heading-word" key={`${word}-${wordIndex}`}>
                     <span>{word}&nbsp;</span>

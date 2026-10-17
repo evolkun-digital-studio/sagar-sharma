@@ -72,8 +72,13 @@ export function Philosophy() {
     >
       <div className="wrap">
         <div className="grid-12 mt-14 gap-y-10 md:mt-20">
-          <RevealLines as="h3" className="t-h1 col-span-12 max-w-[16ch] md:col-span-12 lg:col-span-8">
-            Principles behind every system I build.
+          <RevealLines
+            as="h3"
+            className="t-h1 col-span-12 max-w-none whitespace-nowrap md:col-span-12 lg:col-span-8"
+          >
+            Principles behind every
+            <br />
+            system I build.
           </RevealLines>
           <p className="col-span-12 max-w-[38ch] self-end text-[15px] leading-[1.7] text-graphite md:col-span-8 lg:col-span-4 lg:col-start-9 xl:col-span-3 xl:col-start-10">
             Every technology decision should create long-term business value, scalability, security,
@@ -102,7 +107,7 @@ export function Philosophy() {
                 className="absolute top-0 left-0 h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-700 ease-expo group-hover:scale-x-100 lg:h-full lg:w-px lg:origin-top lg:scale-x-100 lg:scale-y-0 lg:group-hover:scale-y-100"
               />
 
-              <h3 className="overflow-hidden pb-[0.12em] font-semibold leading-[1.2] tracking-[-0.01em] text-ink md:col-span-5 text-[clamp(18px,1.4vw,22px)]">
+              <h3 className="overflow-hidden pb-[0.12em] font-semibold leading-[1.2] tracking-[-0.01em] text-ink md:col-span-5 text-[clamp(18px,1.4vw,18px)]">
                 <span className="ph-title block">{p.title}</span>
               </h3>
               <p className="overflow-hidden text-[15px] leading-[1.65] text-graphite md:col-span-6 md:col-start-7 lg:mt-5 lg:max-w-[26ch]">

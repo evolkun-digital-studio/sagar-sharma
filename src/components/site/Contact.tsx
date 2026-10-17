@@ -6,7 +6,7 @@ import { gsap, registerGsap, scrollToTarget, NO_REDUCE } from "./core";
 import { ChapterMark, RevealLines } from "./Chapter";
 import { Roll } from "./Roll";
 import { person } from "./data";
-import { DubaiClock, Skyline } from "./Dubai";
+import { Skyline } from "./Dubai";
 
 registerGsap();
 
@@ -86,7 +86,7 @@ export function Contact() {
       <div className="px-5 pt-24 md:px-[5vw] md:pt-32">
         <RevealLines
           as="h3"
-          className="display mt-14 max-w-[28ch] text-[clamp(30px,3.6vw,46px)] md:mt-20"
+          className="display mx-auto mt-14 max-w-[28ch] text-center text-[clamp(30px,3.6vw,46px)] md:mt-20"
         >
           Let's build technology that lasts.
         </RevealLines>
@@ -156,13 +156,6 @@ export function Contact() {
 
       <div className="wrap mt-24 md:mt-36">
         <Skyline />
-        <div className="t-small flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-hair pt-5 text-mute">
-          <DubaiClock />
-          <span lang="ar" dir="rtl" className="text-[15px] text-ink">
-            دبي
-          </span>
-          <span>United Arab Emirates</span>
-        </div>
       </div>
 
       <footer className="ct-foot mt-16 md:mt-24">

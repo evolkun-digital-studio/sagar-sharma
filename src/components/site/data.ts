@@ -10,17 +10,6 @@ export const person = {
   schedule: "#contact",
 };
 
-export const chapters = [
-  { href: "#philosophy", label: "Technology Philosophy" },
-  { href: "#purpose", label: "Purpose" },
-  { href: "#group", label: "The Group" },
-  { href: "#journey", label: "Journey" },
-  { href: "#principles", label: "Principles" },
-  { href: "#practice", label: "Practice" },
-  { href: "#writing", label: "Writing" },
-  { href: "#contact", label: "Contact" },
-];
-
 export const philosophy = [
   {
     title: "Systems Before Tools",
@@ -100,10 +89,39 @@ export const journey = [
 export const principles = [
   "Technology should simplify complexity.",
   "Architecture should scale with the business.",
-  "AI should empower people.",
   "Innovation without execution has no value.",
   "Business outcomes matter more than technology choices.",
 ];
+
+export const flagshipProjects = [
+  {
+    number: "01",
+    title: "SR18 Gaming Platform",
+    subtitle: "GLOBAL PLAY INFRASTRUCTURE",
+    technology: "AI engine · Cloud infrastructure · Security layers",
+    description:
+      "A flagship gaming platform built for intelligent services, security, and scale.",
+    outcome:
+      "A stable, scalable platform built for high-concurrency sessions and global growth.",
+  },
+  {
+    number: "02",
+    title: "SR18 Technologies Cloud System",
+    subtitle: "ENTERPRISE CLOUD BACKBONE",
+    technology: "Multi-region cloud · Enterprise integrations · Observability",
+    description: "A multi-layered cloud system for business-critical enterprise platforms.",
+    outcome:
+      "A multi-layered cloud ecosystem powering business-critical systems across UAE and India.",
+  },
+  {
+    number: "03",
+    title: "Enterprise Automation Systems",
+    subtitle: "OPERATIONAL INTELLIGENCE LAYER",
+    technology: "AI workflows · Process automation · Analytics",
+    description: "Automation systems for workflows, analytics, and operational visibility.",
+    outcome: "Automation and intelligent analytics that reduced operational cost by 40%.",
+  },
+] as const;
 
 export const expertise = [
   {
